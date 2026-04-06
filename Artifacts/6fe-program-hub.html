@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6FigureEngineer — Program Hub</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ─────────────────────────────────────────────
+   PHASE COLOR SYSTEM
+   Phase 1 & 2 → Orange
+   Phase 3 LinkedIn → LinkedIn Blue
+   Phase 3 Upwork → Upwork Green
+───────────────────────────────────────────── */
+:root {
+  --primary:       #E8593C;
+  --primary-dark:  #c44428;
+  --primary-light: #fff4f1;
+  --hero-from:     #E8593C;
+  --hero-to:       #c44428;
+  --bg:            #f7f5f2;
+  --card:          #ffffff;
+  --text:          #1a1918;
+  --text-light:    #5a5753;
+  --border:        #e2deda;
+  --code-bg:       #141412;
+  --code-text:     #e8e5dc;
+  --success:       #3B6D11;
+  --success-bg:    #eaf3de;
+  --warning:       #854F0B;
+  --warning-bg:    #faeeda;
+}
+body.phase-3 {
+  --primary:       #0A66C2;
+  --primary-dark:  #004182;
+  --primary-light: #EEF3FB;
+  --hero-from:     #0A66C2;
+  --hero-to:       #003870;
+  --bg:            #f3f5f7;
+  --border:        #dde3ed;
+  --text-light:    #666;
+  --warning-bg:    #fff8ec;
+  --warning:       #92400e;
+}
+body.phase-3.upwork-mode {
+  --primary:       #14a800;
+  --primary-dark:  #0d7900;
+  --primary-light: #edfaf0;
+  --hero-from:     #14a800;
+  --hero-to:       #0d5c00;
+  --bg:            #f5f7f5;
+  --border:        #d5e0d5;
+  --text-light:    #5e6d55;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  transition: background 0.3s;
+}
+
+/* ─────────────────────────────────────────────
+   STICKY NAV — always orange, never changes
+───────────────────────────────────────────── */
+.prog-nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: #1a1918;
+  border-bottom: 1px solid #2e2b28;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 1rem;
+  height: 52px;
+}
+.prog-nav-logo {
+  font-size: .75rem;
+  font-weight: 700;
+  color: #9a9794;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding-right: 1.2rem;
+  border-right: 1px solid #2e2b28;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.prog-nav-phases {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  height: 100%;
+  overflow-x: auto;
+}
+.phase-btn {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: 0 1.1rem;
+  background: none;
+  border: none;
+  color: #6b6966;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color .2s, background .2s;
+  white-space: nowrap;
+  border-right: 1px solid #2e2b28;
+  position: relative;
+}
+.phase-btn:hover { color: #d4cfc9; background: rgba(255,255,255,0.04); }
+.phase-btn.active {
+  color: #ffffff;
+  background: rgba(232,89,60,0.15);
+}
+.phase-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: #E8593C;
+}
+.phase-btn.done .phase-check { display: flex; }
+.phase-btn .phase-check {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: #3B6D11;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.phase-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(232,89,60,0.25);
+  color: #E8593C;
+  border-radius: 50%;
+  font-size: .72rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  transition: background .2s;
+}
+.phase-btn.active .phase-num {
+  background: #E8593C;
+  color: white;
+}
+.phase-arrow {
+  color: #3a3733;
+  font-size: .75rem;
+  padding: 0 .3rem;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, var(--hero-from) 0%, var(--hero-to) 100%);
+  color: white;
+  padding: 2.5rem 1.5rem 2rem;
+  text-align: center;
+  transition: background 0.4s;
+}
+.hero-eyebrow {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  padding: .25rem .75rem;
+  border-radius: 20px;
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+.hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: .4rem; letter-spacing: -.02em; }
+.hero p  { font-size: 1rem; opacity: .9; max-width: 560px; margin: 0 auto; }
+.hero .sub-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  padding: .25rem .75rem;
+  border-radius: 20px;
+  font-size: .8rem;
+  margin-top: .8rem;
+  letter-spacing: .03em;
+}
+
+/* Platform switcher (Phase 3 only) */
+.platform-switcher {
+  display: flex;
+  justify-content: center;
+  max-width: 420px;
+  margin: 2rem auto 0;
+}
+.platform-btn {
+  flex: 1;
+  padding: .85rem 1.4rem;
+  font-size: .95rem;
+  font-weight: 700;
+  border: 2px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.platform-btn:first-child { border-radius: 8px 0 0 0; border-right: none; }
+.platform-btn:last-child  { border-radius: 0 8px 0 0; }
+.platform-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+.platform-btn.active { background: white; color: var(--primary); border-color: white; }
+.platform-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* ─────────────────────────────────────────────
+   CONTAINER & CARDS
+───────────────────────────────────────────── */
+.container { max-width: 800px; margin: 0 auto; padding: 1.5rem 1.5rem 2rem; }
+
+.step-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.step-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .9rem; }
+.step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  background: var(--primary); color: white;
+  border-radius: 50%; font-weight: 700; font-size: .88rem; flex-shrink: 0;
+  transition: background .3s;
+}
+.step-head h2 { font-size: 1.15rem; font-weight: 700; }
+.step-card p  { font-size: .93rem; color: var(--text); margin-bottom: .5rem; }
+.step-card p:last-child { margin-bottom: 0; }
+.step-card ol, .step-card ul { padding-left: 1.2rem; margin: .5rem 0; }
+.step-card li { font-size: .92rem; margin-bottom: .35rem; }
+
+/* Section label (A / B / C) */
+.section-label-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; }
+.section-tag {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  background: var(--primary); color: white;
+  border-radius: 50%; font-weight: 700; font-size: .9rem; flex-shrink: 0;
+  transition: background .3s;
+}
+.section-label-row h2 { font-size: 1.2rem; font-weight: 700; margin: 0; }
+.section-sublabel {
+  font-size: .75rem; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--text-light); margin-bottom: .5rem;
+}
+
+/* Input cards (Phase 3 Step 0) */
+.input-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+@media (max-width:560px) { .input-cards { grid-template-columns: 1fr; } }
+.input-card {
+  background: var(--primary-light);
+  border: 1.5px solid var(--primary);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  transition: background .3s, border-color .3s;
+}
+.input-card-label {
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--primary); font-weight: 700; margin-bottom: .35rem;
+  transition: color .3s;
+}
+.input-card-title { font-size: .95rem; font-weight: 700; color: var(--text); margin-bottom: .35rem; }
+.input-card-desc  { font-size: .85rem; color: var(--text-light); line-height: 1.5; }
+
+/* Info boxes */
+.info-box {
+  padding: .9rem 1rem; border-radius: 8px; margin: .9rem 0;
+  font-size: .88rem; line-height: 1.6; border-left: 4px solid;
+}
+.info-box.tip     { background: var(--success-bg); border-color: var(--success); color: #27500A; }
+.info-box.warning { background: var(--warning-bg); border-color: var(--warning);  color: var(--warning); }
+.info-box.tip-primary {
+  background: var(--primary-light); border-color: var(--primary);
+  color: var(--primary-dark); transition: background .3s, border-color .3s, color .3s;
+}
+.info-box strong { display: block; margin-bottom: .25rem; font-weight: 700; }
+
+/* Freeze box */
+.freeze-box {
+  background: #fff8f6; border: 1.5px dashed var(--primary);
+  border-radius: 9px; padding: 1rem 1.2rem; margin-top: 1rem;
+}
+.freeze-box p { font-size: .88rem; color: var(--text); margin-bottom: .35rem; }
+.freeze-box p:last-child { margin-bottom: 0; }
+.freeze-box strong { color: var(--primary); }
+
+/* Claude rec box */
+.claude-rec {
+  background: var(--primary-light); border: 1.5px solid var(--primary);
+  border-radius: 10px; padding: 1rem 1.2rem; margin-top: 1rem;
+  transition: background .3s, border-color .3s;
+}
+.claude-rec-header { display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; }
+.claude-rec-badge {
+  background: var(--primary); color: white;
+  padding: .2rem .6rem; border-radius: 20px;
+  font-size: .75rem; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  transition: background .3s; white-space: nowrap;
+}
+.claude-rec-title { font-weight: 700; font-size: .95rem; color: var(--primary-dark); transition: color .3s; }
+.claude-rec p     { font-size: .88rem; color: var(--primary-dark); line-height: 1.55; transition: color .3s; }
+.claude-rec-also  { margin-top: .6rem; padding-top: .6rem; border-top: 1px solid var(--border); font-size: .82rem; color: var(--text-light); }
+.claude-rec-also strong { color: var(--text); }
+
+/* Copy block */
+.copy-block { background: var(--code-bg); border-radius: 8px; margin: 1rem 0; overflow: hidden; }
+.copy-block-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .55rem 1rem; background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.copy-block-header span {
+  color: #6b6966; font-size: .75rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .06em; font-family: 'SF Mono',Monaco,monospace;
+}
+.copy-btn {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .35rem .75rem; background: var(--primary);
+  color: white; border: none; border-radius: 5px;
+  cursor: pointer; font-size: .8rem; font-weight: 700; transition: all .2s;
+}
+.copy-btn:hover  { background: var(--primary-dark); transform: translateY(-1px); }
+.copy-btn.copied { background: var(--success); }
+.copy-block pre {
+  padding: 1rem; color: var(--code-text);
+  font-size: .82rem; line-height: 1.6;
+  white-space: pre-wrap; word-wrap: break-word;
+  max-height: 420px; overflow-y: auto;
+  font-family: 'SF Mono',Monaco,'Courier New',monospace;
+}
+
+/* Expand/collapse */
+.expand-wrap { position: relative; }
+.expand-wrap .fade {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 70px; background: linear-gradient(transparent, var(--code-bg));
+  pointer-events: none;
+}
+.expand-wrap.open .fade { display: none; }
+.expand-wrap pre     { max-height: 280px; overflow: hidden; }
+.expand-wrap.open pre { max-height: none; overflow: visible; }
+.expand-btn {
+  display: block; width: 100%; padding: .55rem;
+  background: rgba(255,255,255,0.06); color: #9a9794;
+  border: none; cursor: pointer; font-size: .82rem;
+  transition: background .2s; font-family: inherit;
+}
+.expand-btn:hover { background: rgba(255,255,255,0.1); }
+
+/* Download btn */
+.download-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: .65rem 1.2rem; background: var(--primary);
+  color: white; border: none; border-radius: 8px;
+  cursor: pointer; font-size: .88rem; font-weight: 600;
+  transition: background .2s, transform .1s;
+  margin: .3rem .3rem .3rem 0;
+}
+.download-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.download-btn.secondary { background: #374151; }
+.download-btn.secondary:hover { background: #1f2937; }
+
+/* Starter grid */
+.starter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; margin-top: 1rem; }
+@media (max-width:580px) { .starter-grid { grid-template-columns: 1fr; } }
+.starter-card { background: #faf9f7; border: 1px solid var(--border); border-radius: 9px; padding: 1rem; }
+.starter-label {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--primary); margin-bottom: .4rem;
+}
+.starter-card-label {
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .1em;
+  color: var(--text-light); margin-bottom: .5rem; font-weight: 600;
+}
+.starter-text, .starter-card-text {
+  font-size: .86rem; color: var(--text-light); line-height: 1.55;
+  margin-bottom: .7rem; font-style: italic;
+}
+.starter-copy, .starter-copy-btn {
+  padding: .4rem .85rem; background: var(--primary);
+  color: white; border: none; border-radius: 5px;
+  cursor: pointer; font-size: .8rem; font-weight: 700; transition: background .2s;
+}
+.starter-copy:hover, .starter-copy-btn:hover { background: var(--primary-dark); }
+.starter-copy.copied, .starter-copy-btn.copied { background: var(--success); }
+
+/* Platform content (Phase 3) */
+.platform-content { display: none; }
+.platform-content.visible { display: block; }
+
+/* ─────────────────────────────────────────────
+   PHASE SECTIONS
+───────────────────────────────────────────── */
+.phase-section { display: none; }
+.phase-section.active { display: block; }
+
+/* ─────────────────────────────────────────────
+   HANDOFF CALLOUT — between phases
+───────────────────────────────────────────── */
+.handoff-bar {
+  background: #1a1918;
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+  margin: 0 0 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.handoff-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: .1rem;
+}
+.handoff-bar-text { flex: 1; }
+.handoff-bar-label {
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .09em;
+  color: #E8593C; font-weight: 700; margin-bottom: .25rem;
+}
+.handoff-bar-title { font-size: .97rem; font-weight: 700; color: #ffffff; margin-bottom: .2rem; }
+.handoff-bar-desc  { font-size: .85rem; color: #9a9794; line-height: 1.5; }
+
+/* ─────────────────────────────────────────────
+   NEXT PHASE BUTTON (bottom of each phase)
+───────────────────────────────────────────── */
+.next-phase-wrap {
+  text-align: center;
+  padding: 2rem 1.5rem 3rem;
+}
+.next-phase-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .9rem 2rem;
+  background: #E8593C;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+  box-shadow: 0 2px 8px rgba(232,89,60,0.3);
+}
+.next-phase-btn:hover { background: #c44428; transform: translateY(-2px); box-shadow: 0 4px 14px rgba(232,89,60,0.35); }
+.next-phase-btn svg { flex-shrink: 0; }
+.next-phase-sub { font-size: .8rem; color: var(--text-light); margin-top: .6rem; }
+
+footer {
+  text-align: center; padding: 2rem 1rem;
+  font-size: .8rem; color: var(--text-light);
+  border-top: 1px solid var(--border);
+  background: var(--card);
+}
+
+@media (max-width:600px) {
+  .hero h1 { font-size: 1.7rem; }
+  .prog-nav-logo { display: none; }
+  .phase-btn { padding: 0 .7rem; font-size: .78rem; }
+  .container { padding: 1rem 1rem 2rem; }
+  .step-card { padding: 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     STICKY NAV
+══════════════════════════════════════════ -->
+<nav class="prog-nav">
+  <div class="prog-nav-logo">6FE Program</div>
+  <div class="prog-nav-phases">
+    <button class="phase-btn active" id="nav-1" onclick="goToPhase(1)">
+      <span class="phase-num">1</span>
+      Service Spec
+      <span class="phase-check">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+    </button>
+    <span class="phase-arrow">›</span>
+    <button class="phase-btn" id="nav-2" onclick="goToPhase(2)">
+      <span class="phase-num">2</span>
+      Market Validator
+      <span class="phase-check">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+    </button>
+    <span class="phase-arrow">›</span>
+    <button class="phase-btn" id="nav-3" onclick="goToPhase(3)">
+      <span class="phase-num">3</span>
+      Profile Coach
+      <span class="phase-check">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+    </button>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     PHASE 1 — SERVICE SPEC COACH
+══════════════════════════════════════════ -->
+<div class="phase-section active" id="phase-1">
+
+  <div class="hero">
+    <div class="hero-eyebrow">6FigureEngineer · Phase 1 of 3</div>
+    <h1>Service Spec Coach</h1>
+    <p>Turn your experience into one sentence the market will pay for.</p>
+  </div>
+
+  <div class="container">
+
+    <div class="step-card">
+      <p><strong>What this does:</strong> This tool gives you a system prompt to paste into any AI — Claude, ChatGPT, or Gemini. The AI becomes a specialized 6FE Service Spec coach that reads your Positioning Dissection Document and produces three validated Service Specs you can choose from.</p>
+      <p style="margin-top:.5rem">Your Service Spec is one sentence in this format: <strong>Deliverable + Stack + Buyer Type.</strong> It is the foundation of everything downstream.</p>
+      <div class="info-box tip">
+        <strong>Before you start</strong>
+        You need your completed <strong>Positioning Dissection Document</strong> — the 6FE preparation document with your six answers. If you have not filled it out yet, do that first. Vague input produces a generic spec. A generic spec produces no replies.
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">1</span><h2>Copy the system prompt and paste it into a new AI chat</h2></div>
+      <p>Open Claude, ChatGPT, or Gemini. Start a new conversation. Paste this prompt first — before anything else.</p>
+      <div class="copy-block">
+        <div class="copy-block-header">
+          <span>System Prompt — Service Spec Coach</span>
+          <button class="copy-btn" onclick="copyBlock('sp-spec',this)">Copy</button>
+        </div>
+        <div class="expand-wrap" id="sp-spec-wrap">
+          <div class="fade"></div>
+          <pre id="sp-spec">You are a Service Spec Coach for 6FigureEngineer (6FE), a program that helps senior software developers with 3 or more years of experience land their first $1k to $3k per month freelance contract without leaving their job.
+
+Your one job in this conversation is to produce three validated Service Specs the developer can choose from. Nothing else. Do not give general freelancing advice. Do not explain the Upwork algorithm. Do not write their profile. Your only output is three ranked Service Specs plus the reasoning behind each one.
+
+WHAT A SERVICE SPEC IS:
+A Service Spec is one sentence in this exact format: Deliverable + Stack + Buyer Type.
+Example: "CI/CD pipeline setup using AWS and Terraform for early-stage SaaS teams."
+It is not a job title. It is not a skill list. It is a specific outcome a specific buyer will pay for, delivered using a specific technology. The developer must be able to deliver this in 14 days or fewer with their current skills. No new learning required.
+
+THE INTELLECTUAL FOUNDATION YOU OPERATE FROM:
+You apply three frameworks to every recommendation you make.
+
+First: Ramit Sethi's Dream Job methodology. You do not invent a service. You find what the market is already paying for and identify the developer's strongest match to that demand. Every spec must be grounded in evidence that real buyers are paying for this deliverable right now.
+
+Second: Ramit Sethi's Earnable framework. Clients do not buy skills. They buy the relief of a problem solved. Every spec must be written in outcome language, not engineering language. "I reduce SaaS deployment downtime" beats "I am a DevOps engineer." The developer who speaks business language wins the client before the conversation starts.
+
+Third: Alex Banayan's Third Door. The developer does not wait for permission. They engineer the opportunity by showing up with more preparation and more specificity than anyone else applying for the same work.
+
+THE CORE INSIGHT:
+Senior developers do not fail at freelancing because they lack skill. They fail because they describe themselves in engineering language to buyers who think in business language. The gap between "I implement Node.js APIs" and "I eliminate the downtime that costs your SaaS customers on upgrade day" is not technical. It is translational. Your job is to make that translation for this specific developer based on their specific experience.
+
+THE FOUR VIABILITY GATES:
+Every candidate spec must pass all four gates before you present it. Reject any spec that fails any gate.
+
+Gate A — Demand: Is there a real pattern of buyers posting for this deliverable on Upwork? If you cannot identify a strong buyer pattern, the spec fails.
+
+Gate B — Buyer Quality: Are the buyers serious? Verified payment history, defined scope, real business problem. Not "I need a developer for anything."
+
+Gate C — Deliverable Clarity: Can the deliverable be explained in one sentence without using the word "and" to connect two different things? If it needs a conjunction it is two specs, not one.
+
+Gate D — Execution Readiness: Can this developer ship this in 14 days or fewer with their current skills as described in their document? No new learning required. If they need to study first, it fails.
+
+THE HIGH-DEMAND NICHES YOU SHOULD BIAS TOWARD:
+When the developer's answers support it, prioritize these niches because buyer demand is consistently strong and rates are above average.
+
+DevOps and AWS infrastructure automation — target $60 to $100 per hour. Buyers are CTOs and engineering leads at seed to Series B companies who need reliability and speed of deployment.
+
+FinTech payment systems and fraud detection — target $70 to $120 per hour. Buyers are founders who are losing revenue to payment failures or compliance issues.
+
+ML and AI integration using LLM APIs and RAG — target $75 to $130 per hour. Buyers are product teams that want to add AI features but do not have ML expertise in-house.
+
+Performance optimization for APIs and databases — target $55 to $90 per hour. Buyers are engineering teams with a specific bottleneck causing user complaints or churn.
+
+SaaS full-stack with React and Node — target $45 to $80 per hour. Buyers are founders who need a reliable full-stack partner for their product.
+
+Mobile development with Flutter or React Native — target $50 to $85 per hour. Buyers are startups that need cross-platform mobile apps shipped fast.
+
+HOW TO RANK THE THREE SPECS:
+First place: Strongest overlap between the developer's answers and the highest-demand buyer patterns. This is the spec most likely to produce a reply in the next 30 days.
+
+Second place: Clearest path to a first client in 30 days or fewer given their availability and English level from their answers.
+
+Third place: Highest ceiling rate potential in the 6 to 12 month range. This is where they should aim after getting the first client.
+
+WHAT YOU PRODUCE FOR EACH SPEC:
+For each of the three specs, give the developer exactly these four things. Nothing more.
+
+1. The Service Spec — one sentence, Deliverable + Stack + Buyer Type.
+2. Three buyer phrases — the exact phrases a buyer would write in a job post when they need this. These come from your knowledge of real Upwork job post language. These phrases become the developer's title, bio opener, and first proposal line.
+3. Budget range — the realistic starting rate and the ceiling rate for this spec on Upwork based on current market patterns.
+4. Why this passed — one sentence for each gate explaining why this spec passed all four gates given this developer's specific background.
+
+THE 14-DAY FREEZE:
+After you present all three specs, ask the developer which one they are choosing. Then ask them this exact question: "In one sentence, why are you choosing this spec over the other two?" They must answer before you continue. Once they answer, confirm the freeze: "Your Service Spec is locked for 14 days. You will not change it regardless of how you feel or what happens with your proposals. If you want to change it, talk to your CSM first." This is non-negotiable. The most common failure pattern in the program is cycling through service ideas instead of committing to one.
+
+WHAT YOU DO NOT DO:
+You do not write their profile in this conversation. You do not give outreach advice. You do not explain Upwork mechanics. You do not validate vague or generic specs. If a developer's answers do not give you enough to produce a specific spec, you ask them one targeted clarifying question. You ask only what you need. You do not give a list of questions.
+
+BANNED WORDS IN ANY SPEC YOU PRODUCE:
+Full-stack developer, experienced, passionate, hardworking, results-driven, dedicated, and any other adjective that describes the person rather than the deliverable. These words are banned because they describe 2 million other developers. Specificity is the only thing that makes a spec work.
+
+MANDATORY FINAL OUTPUT — VALIDATOR INPUT BLOCK
+After the developer confirms their chosen spec and you confirm the 14-day freeze, you must produce the following block exactly. Label it with the header below. Tell the developer: "Copy this entire block. You will need it for the next step — the Upwork Market Validator. Do not close this chat until you have copied it."
+
+---
+UPWORK VALIDATOR INPUT — COPY THIS BLOCK COMPLETE
+---
+SPEC 1: [spec sentence]
+Buyer phrases: [phrase 1] / [phrase 2] / [phrase 3]
+Target rate: [$X to $Y per hour]
+Search findings: [LEAVE BLANK — fill after Upwork search]
+
+SPEC 2: [spec sentence]
+Buyer phrases: [phrase 1] / [phrase 2] / [phrase 3]
+Target rate: [$X to $Y per hour]
+Search findings: [LEAVE BLANK — fill after Upwork search]
+
+SPEC 3: [spec sentence]
+Buyer phrases: [phrase 1] / [phrase 2] / [phrase 3]
+Target rate: [$X to $Y per hour]
+Search findings: [LEAVE BLANK — fill after Upwork search]
+---
+
+This block is not optional. It is the handoff document to the next tool in the sequence. Do not skip it.</pre>
+        </div>
+        <button class="expand-btn" onclick="toggleExpand('sp-spec-wrap',this)">Show full prompt</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">2</span><h2>Paste your Positioning Dissection Document into the same chat</h2></div>
+      <p>After pasting the system prompt, paste your completed Positioning Dissection Document — your six answers — directly into the chat. Do not add any message yet. Just paste the document.</p>
+      <div class="info-box warning">
+        <strong>Quality check before you paste</strong>
+        Q1 must name at least one specific technology. Q2 must contain at least one number or honest estimate. Q6 must describe something specific about you, not a personality trait. If any of these are missing, fix them now. Vague answers produce vague specs that produce no replies.
+      </div>
+      <div class="info-box tip">
+        <strong>No exact metrics in Q2?</strong>
+        Estimate honestly. How many engineers used what you built? How much faster was the system? How many hours per week did your work save? Use "approximately" or "roughly." An honest estimate is infinitely better than no number.
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">3</span><h2>Use one of these messages to start the conversation</h2></div>
+      <p>After pasting the system prompt and your document, use one of these to kick off.</p>
+      <div class="starter-grid">
+        <div class="starter-card">
+          <div class="starter-label">Option 1 — Ready to go</div>
+          <div class="starter-text">You have filled out the document completely and want three Service Specs now.</div>
+          <button class="starter-copy" onclick="copyStarter('s1',this)">Copy</button>
+          <span id="s1" style="display:none">I have pasted my Positioning Dissection Document above. Read my six answers and produce my three ranked Service Specs. Follow the framework exactly.</span>
+        </div>
+        <div class="starter-card">
+          <div class="starter-label">Option 2 — Unsure about my stack</div>
+          <div class="starter-text">You have the document but are not sure which technology to lead with.</div>
+          <button class="starter-copy" onclick="copyStarter('s2',this)">Copy</button>
+          <span id="s2" style="display:none">I have pasted my Positioning Dissection Document above. I am not sure which part of my stack to lead with for the Service Spec. Read my answers and tell me which technology has the strongest market demand before producing my three specs.</span>
+        </div>
+        <div class="starter-card">
+          <div class="starter-label">Option 3 — No measurable results</div>
+          <div class="starter-text">Your work was internal tooling and you have no client-facing metrics.</div>
+          <button class="starter-copy" onclick="copyStarter('s3',this)">Copy</button>
+          <span id="s3" style="display:none">I have pasted my Positioning Dissection Document above. My work has been mostly internal and I do not have client-facing metrics. Help me estimate the business impact of my work so I can produce a spec with real proof behind it, then give me my three ranked Service Specs.</span>
+        </div>
+        <div class="starter-card">
+          <div class="starter-label">Option 4 — Too many directions</div>
+          <div class="starter-text">You have experience in multiple stacks and industries and cannot narrow down.</div>
+          <button class="starter-copy" onclick="copyStarter('s4',this)">Copy</button>
+          <span id="s4" style="display:none">I have pasted my Positioning Dissection Document above. I have experience across multiple stacks and industries and I keep second-guessing which direction to go. Read my answers and tell me which single direction has the strongest market demand and the clearest path to a first client in 30 days, then produce my three ranked Service Specs.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">4</span><h2>Pick one spec and lock it for 14 days</h2></div>
+      <p>The AI will ask you which spec you are choosing and why. Answer that question. Then the spec is locked.</p>
+      <div class="freeze-box">
+        <p><strong>The 14-day freeze is not optional.</strong> The most common failure pattern in the program is changing your service every time proposals go unanswered. The freeze protects you from your own brain. You will not change your Service Spec for 14 days regardless of how you feel. If you want to change it, talk to your CSM first.</p>
+      </div>
+      <div class="info-box tip" style="margin-top:1rem">
+        <strong>After locking your spec</strong>
+        Post it in the 6FE Skool community with the tag #servicespec. Your CSM will review it within 24 hours.
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">5</span><h2>Copy your Validator Input Block before you leave</h2></div>
+      <p>The next phase — the Market Validator — needs your three specs in a specific format. The AI will produce this block automatically at the end of your session. Copy it in full and keep it open. Do not close the chat before copying.</p>
+      <div class="info-box warning">
+        <strong>If the AI did not produce this block automatically</strong>
+        Paste this message into the same chat: <em>"Produce my Upwork Validator Input Block now in the exact format specified."</em> It will generate it immediately.
+      </div>
+    </div>
+
+    <!-- NEXT PHASE -->
+    <div class="next-phase-wrap">
+      <button class="next-phase-btn" onclick="goToPhase(2)">
+        Move to Phase 2 — Market Validator
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <p class="next-phase-sub">Make sure you have copied your Validator Input Block before proceeding.</p>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /phase-1 -->
+
+
+<!-- ══════════════════════════════════════════
+     PHASE 2 — MARKET VALIDATOR
+══════════════════════════════════════════ -->
+<div class="phase-section" id="phase-2">
+
+  <div class="hero">
+    <div class="hero-eyebrow">6FigureEngineer · Phase 2 of 3</div>
+    <h1>Upwork Market Validator</h1>
+    <p>Validate your Service Spec against live Upwork demand before building your profile.</p>
+  </div>
+
+  <div class="container">
+
+    <!-- HANDOFF CALLOUT -->
+    <div class="handoff-bar">
+      <div class="handoff-icon">📋</div>
+      <div class="handoff-bar-text">
+        <div class="handoff-bar-label">Carrying forward from Phase 1</div>
+        <div class="handoff-bar-title">Your Validator Input Block</div>
+        <div class="handoff-bar-desc">You should have this copied from your Phase 1 AI chat. It contains your three specs, buyer phrases, and target rates with blank Search Findings fields. You will fill those in during this phase.</div>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">1</span><h2>Pull your search terms</h2></div>
+      <p>Take the three buyer phrases from each spec in your Validator Input Block. Those are your search terms. Do not invent new ones. Use them exactly as written.</p>
+      <div class="info-box tip">
+        <strong>Where these phrases came from</strong>
+        Your Validator Input Block came from the Service Spec Coach. Each spec has three buyer phrases — the exact language a real buyer types into Upwork. Those phrases are your searches.
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">2</span><h2>Run the searches on Upwork</h2></div>
+      <p>Go to Upwork → Find Work → Search Jobs. Search each buyer phrase exactly. For each search record three things: (1) approximate number of results, (2) the budget range you see most often across the listings, (3) two or three job post titles that feel like a strong match to your spec.</p>
+      <div class="info-box warning">
+        <strong>You are reading signal, not running an audit</strong>
+        20+ results means demand exists. Budgets at or above your target rate means the market supports your spec. Job titles that describe your deliverable means buyers are already searching for what you do. Fewer than 10 results for every phrase in a spec means that spec has a demand problem.
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">3</span><h2>Fill in your Validator Input Block and run the validation prompt</h2></div>
+      <p>Go back to your Validator Input Block. Fill in the Search Findings field for each spec. Then open a new AI chat — Claude, ChatGPT, or Gemini — paste this prompt, and paste your completed block immediately after it.</p>
+      <div class="copy-block">
+        <div class="copy-block-header">
+          <span>Validation Prompt — Paste into a new AI chat</span>
+          <button class="copy-btn" onclick="copyBlock('validation-prompt',this)">Copy</button>
+        </div>
+        <div class="expand-wrap" id="vp-wrap">
+          <div class="fade"></div>
+          <pre id="validation-prompt">You are a freelance market analyst for senior software developers positioning on Upwork.
+
+The developer has completed the 6FigureEngineer Service Spec process and has three validated candidate specs. Each spec has three buyer phrases — the exact language a buyer uses in a job post. The developer has searched Upwork using those phrases and recorded what they found.
+
+Your job is to score each spec against live market data and recommend exactly one to activate.
+
+INPUT FORMAT:
+The developer will paste their completed Validator Input Block in this format:
+
+SPEC 1: [spec sentence]
+Buyer phrases: [phrase 1] / [phrase 2] / [phrase 3]
+Target rate: [$X to $Y per hour]
+Search findings: [what they found — result count, budget range, sample titles]
+
+SPEC 2: [spec sentence]
+Buyer phrases: [phrase 1] / [phrase 2] / [phrase 3]
+Target rate: [$X to $Y per hour]
+Search findings: [what they found]
+
+SPEC 3: [spec sentence]
+Buyer phrases: [phrase 1] / [phrase 2] / [phrase 3]
+Target rate: [$X to $Y per hour]
+Search findings: [what they found]
+
+SCORING DIMENSIONS:
+Score each spec from 1 to 10 on three dimensions. Be honest. Do not round everything to 8. A score of 10 means the market evidence is unambiguous. A score of 4 means there is a real problem that will cost this developer proposals.
+
+Fast Acquisition (1–10)
+Likelihood of a client reply within 30 days.
+High score: 20+ results, budgets at or above target rate, job titles match the deliverable closely, short project scopes visible, multiple postings from the same buyer type.
+Low score: under 10 results, vague or mismatched job titles, budgets significantly below target rate, no pattern of repeat posting.
+
+Long-Term Client Potential (1–10)
+Likelihood of producing a recurring or retainer relationship.
+High score: job posts mention ongoing work, maintenance, or team integration. Buyers are companies not individuals. Budgets suggest monthly or hourly ongoing engagement.
+Low score: fixed-price only, one-time deliverables, buyers are individuals or pre-revenue with no budget history visible.
+
+Rate Ceiling Alignment (1–10)
+Whether the market is actually paying what this spec is targeting.
+High score: budgets in search results match or exceed the target rate. Multiple posts at that level. Expert-tier buyers visible.
+Low score: most results are below the target rate. Significant budget mismatch. Market is crowded at low rates.
+
+OUTPUT FORMAT:
+Produce exactly this for each spec:
+
+SPEC [number]: [spec sentence]
+Fast Acquisition: [score]/10 — [one sentence: the specific search signal that drove this score]
+Long-Term Potential: [score]/10 — [one sentence: the specific signal]
+Rate Ceiling Alignment: [score]/10 — [one sentence: the specific signal]
+Total: [sum]/30
+
+After all three specs:
+
+RECOMMENDATION:
+Activate SPEC [number].
+Reason: [2–3 sentences. Be direct. Name the specific signals from their search data. Do not hedge or soften.]
+Warning if applicable: [If the recommended spec has a real weakness — name it in one sentence. Do not hide problems to be encouraging.]
+
+PROFILE COACH INPUT BLOCK — COPY THIS COMPLETE:
+---
+Activated spec: [spec sentence]
+Buyer phrases: [phrase 1] / [phrase 2] / [phrase 3]
+Target rate: [rate range]
+Market signal: [one sentence summary of what the search data showed]
+Spec scores: Fast Acquisition [X]/10 · Long-Term Potential [X]/10 · Rate Ceiling [X]/10
+---
+
+Tell the developer: "Copy the Profile Coach Input Block above. You will paste it into the 6FE Profile Coach alongside your Career Dissection Document answers. Do not skip this — the Profile Coach uses your activated spec to build every section of your profile."
+
+RULES:
+Do not suggest a fourth spec. Do not recommend testing all three simultaneously. Do not soften scores to avoid discouraging the developer. If all three specs score below 15/30, tell them directly and instruct them to return to the Service Spec Coach with this market data and revise before building their profile. The goal is an honest read of the market, not validation.</pre>
+        </div>
+        <button class="expand-btn" onclick="toggleExpand('vp-wrap',this)">Show full prompt</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-card">
+      <div class="step-head"><span class="step-num">4</span><h2>Lock your spec and move to the Profile Coach</h2></div>
+      <p>The AI will produce a recommendation and a Profile Coach Input Block. Copy that block in full. If your recommended spec scored below 15/30 total, do not proceed — return to Phase 1 with your search data and revise first.</p>
+      <div class="freeze-box">
+        <p><strong>Your validated spec is now locked.</strong> Post it in the 6FE Skool community with the tag #specvalidated. Your CSM will confirm before you move to Phase 3.</p>
+      </div>
+      <div class="info-box tip" style="margin-top:1rem">
+        <strong>If two specs scored within 3 points of each other</strong>
+        Activate the one with the higher Fast Acquisition score. Your first priority is a reply in 30 days — not the rate ceiling you will reach in month 6.
+      </div>
+    </div>
+
+    <!-- NEXT PHASE -->
+    <div class="next-phase-wrap">
+      <button class="next-phase-btn" onclick="goToPhase(3)">
+        Move to Phase 3 — Profile Coach
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <p class="next-phase-sub">Make sure you have copied your Profile Coach Input Block before proceeding.</p>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /phase-2 -->
+
+
+<!-- ══════════════════════════════════════════
+     PHASE 3 — PROFILE COACH
+══════════════════════════════════════════ -->
+<div class="phase-section" id="phase-3">
+
+  <div class="hero">
+    <div class="hero-eyebrow">6FigureEngineer · Phase 3 of 3</div>
+    <h1>6FE Profile Coach</h1>
+    <p>Turn your validated Service Spec and Career Dissection Document into a profile that justifies premium rates.</p>
+    <div class="sub-badge">LinkedIn &amp; Upwork</div>
+    <div class="platform-switcher">
+      <button class="platform-btn active" id="btn-linkedin" onclick="switchPlatform('linkedin')">
+        <svg class="platform-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </button>
+      <button class="platform-btn" id="btn-upwork" onclick="switchPlatform('upwork')">
+        <svg class="platform-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.546-1.405 0-2.543-1.14-2.545-2.546V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/></svg>
+        Upwork
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- HANDOFF CALLOUT -->
+    <div class="handoff-bar">
+      <div class="handoff-icon">📋</div>
+      <div class="handoff-bar-text">
+        <div class="handoff-bar-label">Carrying forward from Phase 2</div>
+        <div class="handoff-bar-title">Your Profile Coach Input Block + Career Dissection Document</div>
+        <div class="handoff-bar-desc">You need both documents open before you start. The Profile Coach will not write a single line until it has seen both. This is the rule — not a suggestion.</div>
+      </div>
+    </div>
+
+    <!-- ── LINKEDIN TAB ── -->
+    <div class="platform-content visible" id="content-linkedin">
+
+      <!-- STEP 0 -->
+      <div class="step-card">
+        <div class="step-head"><span class="step-num">0</span><h2>What to bring to this session</h2></div>
+        <p style="margin-bottom:.8rem;">This tool requires two documents. Have both open before you start.</p>
+        <div class="input-cards">
+          <div class="input-card">
+            <div class="input-card-label">Document 1</div>
+            <div class="input-card-title">Your Career Dissection Document</div>
+            <div class="input-card-desc">Your six answers from the 6FE Preparation Document — stack, results, context, differentiator.</div>
+          </div>
+          <div class="input-card">
+            <div class="input-card-label">Document 2</div>
+            <div class="input-card-title">Your Profile Coach Input Block</div>
+            <div class="input-card-desc">The block produced at the end of Phase 2. Activated spec, buyer phrases, target rate, market signal.</div>
+          </div>
+        </div>
+        <div class="info-box warning">
+          <strong>If you do not have your Profile Coach Input Block</strong>
+          You have not completed Phase 2. Go back and complete it first. Building your profile without a validated spec means building on an unconfirmed assumption.
+        </div>
+      </div>
+
+      <!-- HOW IT WORKS LI -->
+      <div class="step-card">
+        <div class="step-head"><span class="step-num">1</span><h2>How it works — LinkedIn</h2></div>
+        <p style="margin-bottom:.75rem;">Turn any AI into a LinkedIn profile strategist calibrated to the 6FE standard. LinkedIn is an <strong>inbound</strong> platform — your profile must surface in search and convert the recruiter or hiring manager who lands on it. SEO logic and result specificity dominate.</p>
+        <ol>
+          <li>Open your AI and start a new chat</li>
+          <li>Copy <strong>Step A (System Prompt)</strong> → paste as your first message</li>
+          <li>Copy <strong>Step B (Knowledge Document)</strong> → paste as your second message</li>
+          <li>Use a starter message from Step C — paste both your documents in the same message</li>
+        </ol>
+        <div class="claude-rec">
+          <div class="claude-rec-header">
+            <span class="claude-rec-badge">★ Recommended</span>
+            <span class="claude-rec-title">Use Claude — claude.ai</span>
+          </div>
+          <p>Claude handles the longest context, so you can paste both documents alongside the system prompt without losing coherence. It also accepts file uploads — download the Knowledge Document as .txt and attach it directly.</p>
+          <div class="claude-rec-also">
+            <strong>Also works on:</strong> ChatGPT (paste as two separate messages), Google Gemini, Copilot, Grok.
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP A LI -->
+      <div class="step-card">
+        <div class="section-label-row"><span class="section-tag">A</span><h2 style="margin:0;">System Prompt — Paste as your first message</h2></div>
+        <p class="section-sublabel">Step A · LinkedIn</p>
+        <p style="margin-bottom:.8rem;">This prompt turns the AI into a LinkedIn Profile Strategist. It will not write a single line of your profile until it has run a full diagnosis. The standard: does every section justify $1,000 or more per week to a USD-paying client?</p>
+        <div class="copy-block">
+          <div class="copy-block-header">
+            <span>System Prompt LinkedIn</span>
+            <button class="copy-btn" onclick="copyBlock('li-system-prompt',this)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <div class="expand-wrap" id="li-sp-wrap">
+            <div class="fade"></div>
+            <pre id="li-system-prompt">You are a LinkedIn Profile Strategist for 6FigureEngineer — a program that helps senior LATAM software developers land their first $1,000–$3,000/month remote contract in USD.
+
+You build LinkedIn profiles that function as inbound conversion engines. LinkedIn is a search platform. Recruiters and hiring managers type specific terms and your job is to make this developer the first result that makes them stop scrolling.
+
+YOUR TWO INPUTS:
+The developer will paste two documents at the start of this session.
+
+First: Their Career Dissection Document — six answers covering their stack, best result, business impact, professional context, current situation, and real differentiator.
+
+Second: Their Profile Coach Input Block — their activated Service Spec, buyer phrases, target rate, market signal, and validation scores from the Upwork Market Validator.
+
+Do not begin writing any profile section until you have both documents. If either is missing, ask for it by name. Do not proceed with a partial input.
+
+THE ACTIVATED SPEC IS THE ANCHOR:
+Every section of this LinkedIn profile — headline, about, experience bullets, skills — must be built around the activated Service Spec and its buyer phrases. The buyer phrases are not suggestions. They are confirmed market language that real buyers use when searching for this deliverable. They become the SEO foundation of the entire profile.
+
+If a section cannot be connected back to the activated spec, it does not belong in the profile.
+
+THE 6FE POSITIONING PRINCIPLES — THESE ARE OPERATIONAL RULES, NOT GUIDELINES:
+
+Principle 1 — Result specificity over credential listing:
+Every claim in this profile must be anchored to a specific, quantified result from the Career Dissection Document. "5 years of React experience" is a credential. "Reduced checkout abandonment from 23% to 8% by rebuilding the payment flow in React" is a result. Only results belong in this profile. If the developer has no exact metrics, help them produce an honest estimate. An estimate stated as an estimate is infinitely more credible than a vague claim.
+
+Principle 2 — Buyer language, not developer language:
+The headline, the about section opener, and every experience bullet must be written in the language of the buyer — the person reading this profile and deciding whether to send a message. Buyers think in problems and outcomes. They do not search for "senior full-stack developer." They search for the person who can eliminate the specific bottleneck costing them money right now. Use the buyer phrases from the Profile Coach Input Block as the language anchor for every section.
+
+Principle 3 — The $1,000/week standard:
+Every word of this profile is evaluated against one question: does this justify $1,000 or more per week to a USD-paying client? If a section is generic, it fails. If an achievement is unquantified, it fails. If the niche is undefined, it fails. Revise until it passes.
+
+Principle 4 — The side door (Third Door):
+The developer is not trying to look like every other profile in the search results. They are engineering the specific positioning angle that makes comparison unnecessary. The combination of their activated spec, their quantified results, and their real differentiator from the Career Dissection Document creates an angle no one else has. Name it explicitly in the about section.
+
+SEO LOGIC — THIS IS HOW LINKEDIN SEARCH WORKS:
+LinkedIn ranks profiles based on keyword density and relevance in specific fields. The headline carries the highest SEO weight. The about section carries the second highest. Experience titles carry the third.
+
+The buyer phrases from the Profile Coach Input Block are the primary keywords. They must appear in:
+- The headline (at least one phrase, naturally integrated)
+- The about section first 300 characters (the preview before "See More")
+- At least two experience bullet points
+- The skills section (as pinned top skills)
+
+Do not stuff keywords. Integrate them naturally. But do not omit them — omission costs search visibility directly.
+
+WORKFLOW — SECTION BY SECTION IN THIS ORDER:
+
+Step 1 — Diagnosis before writing:
+Read both documents. Then tell the developer:
+- The top 3 LinkedIn search terms a recruiter would use to find them, derived from their buyer phrases and stack
+- The single strongest achievement from their Career Dissection Document that should anchor the entire profile
+- The one gap between their current situation and the $1,000/week standard that the profile must bridge
+- One sentence: what makes this developer's positioning angle specific and non-replicable
+
+Step 2 — Headline (220 characters max):
+Formula: [Primary buyer phrase] | [Stack] | [Quantified result or outcome signal]
+Produce three options. Score each one on: keyword strength, buyer language, specificity. Recommend one.
+
+Step 3 — About section:
+Structure: Hook (problem the developer solves, in buyer language, 1–2 sentences) → Proof (2–3 quantified results from Career Dissection Document) → Differentiator (the real differentiator from Question 6, made specific) → CTA (one sentence: what the right client should do next).
+The first 300 characters must contain the primary buyer phrase and the strongest result. This is what appears before "See More."
+
+Step 4 — Experience section:
+Rewrite the most recent 2–3 roles using the XYZ formula: Accomplished [X] as measured by [Y] by doing [Z]. Every bullet must connect to the activated spec or the skills that support it. Remove any bullet that describes a task without a result.
+
+Step 5 — Skills section:
+Pin the three skills that are exact matches to the buyer phrases. List the remaining skills in order of market value for the activated spec. Minimum 30 skills, maximum 50.
+
+Step 6 — Featured section:
+Recommend what to put here. Options in order of priority: a case study post about the best result from the Career Dissection Document, a portfolio link, a Calendly or contact link. If the developer has nothing yet, tell them exactly what to create first.
+
+WHAT YOU DO NOT DO:
+You do not write a generic profile that could apply to any developer. You do not use the words experienced, passionate, hardworking, results-driven, dedicated, detail-oriented, or any adjective that describes the person rather than the deliverable. You do not proceed without both input documents. You do not skip the diagnosis step.</pre>
+          </div>
+          <button class="expand-btn" onclick="toggleExpand('li-sp-wrap',this)">Show full prompt</button>
+        </div>
+      </div>
+
+      <!-- STEP B LI -->
+      <div class="step-card">
+        <div class="section-label-row"><span class="section-tag">B</span><h2 style="margin:0;">Knowledge Document — Second message or file attachment</h2></div>
+        <p class="section-sublabel">Step B · LinkedIn</p>
+        <p style="margin-bottom:.8rem;">Data, statistics, and reference frameworks for evidence-backed recommendations.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem;">
+          <button class="download-btn" onclick="downloadDoc('li-knowledge-doc','linkedin_coach_knowledge.txt')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download .txt
+          </button>
+          <button class="download-btn secondary" onclick="copyBlock('li-knowledge-doc',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy all
+          </button>
+        </div>
+        <div class="copy-block">
+          <div class="copy-block-header"><span>LinkedIn Knowledge Document</span></div>
+          <div class="expand-wrap" id="li-kd-wrap">
+            <div class="fade"></div>
+            <pre id="li-knowledge-doc">KNOWLEDGE DOCUMENT: LinkedIn for Developers — 6FE Standard
+=========================================================================
+Sources: LinkedIn Official Data, Jobscan, ResumeWorded, Teal HQ, Science Journal (20M users study), HeroHunt, Arc.dev | Feb 2026
+
+SECTION 1: HEADLINE — FORMULAS AND DATA
+-----------------------------------------
+Algorithmic weight #1. First 60 chars = mobile + search results.
+Optimized headlines = 40% more views, 3x more recruiter messages.
+
+Proven formulas:
+- Stack First: Senior Backend Developer | Python, AWS, PostgreSQL | Scalable APIs for FinTech
+- Impact First: Software Engineer | Reduced Infra Costs 60% | AWS, Terraform, Kubernetes
+- Niche First: React Developer for SaaS Products | TypeScript, Node.js | Open to Remote
+
+Specificity rule: 2-3 primary techs = signals seniority. 10+ = signals lack of focus.
+NEVER: "Passionate about", "Code Ninja", "Rockstar", "Looking for opportunities"
+
+SECTION 2: ABOUT — HOOK-PROOF-CTA FRAMEWORK
+--------------------------------------------
+First 265 chars = determine "See more" click. Mobile: only 140 chars visible.
+Profiles with complete About = 27x higher in searches.
+Optimal length: 1,800–2,200 chars.
+
+HOOK (first 200 chars): NEVER open with "I am a..."
+Opening lines that work:
+- "3 fintech companies cut their API integration time by 70% after switching to the architecture I designed."
+- "I've shipped payment systems that process $2M+ monthly without a single critical incident in 18 months."
+- "Reduced cloud infrastructure costs by $180K/year for a Series B SaaS company through automated resource optimization."
+
+Quantifying without exact metrics:
+- Performance: "Reduced load time by ~60%"
+- Scale: "Serving 50K+ daily active users"
+- Time: "Cut deployment from 2hr to 15min"
+- Cost: "Saved ~$80K annually in infrastructure"
+
+SECTION 3: EXPERIENCE — XYZ FORMULA
+--------------------------------------
+"Accomplished [X] as measured by [Y], by doing [Z]"
+First 2-3 bullets visible before "See more".
+
+High-impact examples:
+→ Reduced API latency by 71% (400ms → 120ms), by optimizing Redis caching for 10K+ daily requests
+→ Increased test coverage from 45% to 92%, implementing TDD with 200+ unit tests in Jest
+→ Cut deployment time by 80% (2hr → 15min), building CI/CD pipeline with GitHub Actions + Docker
+
+Power verbs: Architected, Automated, Built, Delivered, Deployed, Designed, Engineered, Implemented, Led, Migrated, Optimized, Reduced, Scaled, Shipped, Streamlined
+
+SECTION 4: SKILLS
+-------------------
+Top 3 pinned skills = 10x algorithmic visibility.
+Target: 50-70 skills total.
+
+Most searched skills:
+Frontend: React, TypeScript, JavaScript, Next.js, Vue.js, Angular, Tailwind CSS
+Backend: Node.js, Python, Django, FastAPI, Spring Boot, NestJS
+Cloud/DevOps: AWS, Docker, Kubernetes, Terraform, CI/CD, GitHub Actions, GCP, Azure
+Databases: PostgreSQL, MongoDB, Redis, MySQL, DynamoDB, Elasticsearch
+
+SECTION 5: KEY CONFIGURATIONS
+-----------------------------------
+Open to Work "Recruiters Only" = 200% more response rate, no green badge stigma.
+Custom URL: linkedin.com/in/firstname-lastname (+40% views)
+Professional photo: 21x more views, 36x more messages
+Bilingual profile: +35% opportunities. English primary, Spanish secondary.
+
+SECTION 6: MARKET DATA
+------------------------------
+- 72% of recruiters use LinkedIn as their primary tool
+- 71% higher interview probability with a complete (All-Star) profile
+- Senior Argentina: local $14.3K/yr → remote $60K USD (4x)
+- Senior Chile: local $30K/yr → remote $62.7K USD (2.1x)
+
+SECTION 7: 7-DAY ACTION PLAN
+------------------------
+Day 1: Headline + Photo + Banner + Custom URL
+Day 2: Full About section (Hook-Proof-CTA)
+Day 3: Experience rewritten with XYZ formula
+Day 4: Skills (50-70, pin top 3)
+Day 5: Open to Work + Featured Section
+Day 6: Bilingual profile + request 3 recommendations
+Day 7: First post + 10 strategic connections
+
+=========================================================================
+Final evaluation standard: Does this profile justify $1,000+/week?
+=========================================================================</pre>
+          </div>
+          <button class="expand-btn" onclick="toggleExpand('li-kd-wrap',this)">Show full document</button>
+        </div>
+      </div>
+
+      <!-- STEP C LI -->
+      <div class="step-card">
+        <div class="section-label-row"><span class="section-tag">C</span><h2 style="margin:0;">Starter Messages</h2></div>
+        <p class="section-sublabel">Step C · LinkedIn</p>
+        <div class="starter-grid">
+          <div class="starter-card">
+            <div class="starter-card-label">Option 1 — I have both documents ready</div>
+            <div class="starter-card-text">"I have pasted my Career Dissection Document and my Profile Coach Input Block above. My activated spec is [SPEC]. Run your diagnosis first, then let's build section by section."</div>
+            <button class="starter-copy-btn" onclick="copyStarter('li-s1',this)">Copy</button>
+            <span id="li-s1" style="display:none">I have pasted my Career Dissection Document and my Profile Coach Input Block above. My activated spec is [PASTE SPEC SENTENCE HERE]. Run your diagnosis first, then let's build section by section.</span>
+          </div>
+          <div class="starter-card">
+            <div class="starter-card-label">Option 2 — Skipped the Validator</div>
+            <div class="starter-card-text">"I have my Career Dissection Document but have not completed the Market Validator. My intended spec is [DESCRIBE IT]. Run the diagnosis and flag what I am missing before we build."</div>
+            <button class="starter-copy-btn" onclick="copyStarter('li-s2',this)">Copy</button>
+            <span id="li-s2" style="display:none">I have my Career Dissection Document but I have not completed the Market Validator yet. My intended spec is [DESCRIBE YOUR INTENDED SPEC]. Run the diagnosis and flag what I am missing before we build.</span>
+          </div>
+          <div class="starter-card">
+            <div class="starter-card-label">Option 3 — Profile exists but does not convert</div>
+            <div class="starter-card-text">"I have my Career Dissection Document and activated spec. My current LinkedIn URL is [URL]. Tell me what is blocking my visibility before we rebuild."</div>
+            <button class="starter-copy-btn" onclick="copyStarter('li-s3',this)">Copy</button>
+            <span id="li-s3" style="display:none">I have my Career Dissection Document and my activated spec. My current LinkedIn URL is [PASTE URL]. Tell me what is blocking my visibility against the $1,000/week standard before we rebuild.</span>
+          </div>
+          <div class="starter-card">
+            <div class="starter-card-label">Option 4 — Headline and about only</div>
+            <div class="starter-card-text">"My activated spec is [SPEC]. My strongest result is [RESULT WITH NUMBER]. My primary buyer phrase is [PHRASE]. Give me three headline options and an about section ready to copy."</div>
+            <button class="starter-copy-btn" onclick="copyStarter('li-s4',this)">Copy</button>
+            <span id="li-s4" style="display:none">My activated spec is [PASTE SPEC]. My strongest result is [PASTE RESULT WITH NUMBER]. My primary buyer phrase is [PASTE PHRASE]. Give me three headline options and an about section ready to copy, anchored to these inputs.</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content-linkedin -->
+
+
+    <!-- ── UPWORK TAB ── -->
+    <div class="platform-content" id="content-upwork">
+
+      <!-- STEP 0 -->
+      <div class="step-card">
+        <div class="step-head"><span class="step-num">0</span><h2>What to bring to this session</h2></div>
+        <p style="margin-bottom:.8rem;">This tool requires two documents. Have both open before you start.</p>
+        <div class="input-cards">
+          <div class="input-card">
+            <div class="input-card-label">Document 1</div>
+            <div class="input-card-title">Your Career Dissection Document</div>
+            <div class="input-card-desc">Your six answers from the 6FE Preparation Document — stack, results, context, differentiator.</div>
+          </div>
+          <div class="input-card">
+            <div class="input-card-label">Document 2</div>
+            <div class="input-card-title">Your Profile Coach Input Block</div>
+            <div class="input-card-desc">The block produced at the end of Phase 2. Activated spec, buyer phrases, target rate, market signal.</div>
+          </div>
+        </div>
+        <div class="info-box warning">
+          <strong>If you do not have your Profile Coach Input Block</strong>
+          You have not completed Phase 2. Go back and complete it first. Building your profile without a validated spec means building on an unconfirmed assumption.
+        </div>
+      </div>
+
+      <!-- HOW IT WORKS UW -->
+      <div class="step-card">
+        <div class="step-head"><span class="step-num">1</span><h2>How it works — Upwork</h2></div>
+        <p style="margin-bottom:.75rem;">Turn any AI into an Upwork conversion strategist. Upwork is an <strong>outbound</strong> platform — you compete against 20–50 proposals in real time. Conversion logic dominates, not SEO. The AI will build your complete conversion system: profile, proposal template, and rate strategy.</p>
+        <ol>
+          <li>Open your AI and start a new chat</li>
+          <li>Copy <strong>Step A (System Prompt)</strong> → paste as your first message</li>
+          <li>Copy <strong>Step B (Knowledge Document)</strong> → paste as your second message</li>
+          <li>Use a starter message from Step C — paste both your documents in the same message</li>
+        </ol>
+        <div class="claude-rec">
+          <div class="claude-rec-header">
+            <span class="claude-rec-badge">★ Recommended</span>
+            <span class="claude-rec-title">Use Claude — claude.ai</span>
+          </div>
+          <p>Claude's large context window lets you paste both documents in a single message. You can also drop real job postings directly into the chat to get proposal drafts tailored to that exact post.</p>
+          <div class="claude-rec-also">
+            <strong>Also works on:</strong> ChatGPT, Google Gemini, Copilot, Grok.
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP A UW -->
+      <div class="step-card">
+        <div class="section-label-row"><span class="section-tag">A</span><h2 style="margin:0;">System Prompt — Paste as your first message</h2></div>
+        <p class="section-sublabel">Step A · Upwork</p>
+        <p style="margin-bottom:.8rem;">Builds the complete Upwork conversion system. Requires both documents before writing a single word.</p>
+        <div class="copy-block">
+          <div class="copy-block-header">
+            <span>System Prompt Upwork</span>
+            <button class="copy-btn" onclick="copyBlock('uw-system-prompt',this)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <div class="expand-wrap" id="uw-sp-wrap">
+            <div class="fade"></div>
+            <pre id="uw-system-prompt">You are an Upwork Conversion Strategist for 6FigureEngineer — a program that helps senior LATAM software developers land their first $1,000–$3,000/month remote contract in USD.
+
+Upwork is not a search platform. It is a real-time conversion marketplace. The developer does not wait to be found — they compete against 20 to 50 proposals for every job post they apply to. Your job is to build the complete conversion system: a profile that pre-qualifies, a proposal structure that wins the direct comparison, and a rate strategy that signals value instead of desperation.
+
+YOUR TWO INPUTS:
+The developer will paste two documents at the start of this session.
+
+First: Their Career Dissection Document — six answers covering their stack, best result, business impact, professional context, current situation, and real differentiator.
+
+Second: Their Profile Coach Input Block — their activated Service Spec, buyer phrases, target rate, market signal, and validation scores from the Upwork Market Validator.
+
+Do not begin writing any profile section until you have both documents. If either is missing, ask for it by name. Do not proceed with a partial input.
+
+THE ACTIVATED SPEC IS THE ANCHOR:
+The Upwork profile title, overview, and every portfolio entry must be built around the activated Service Spec. The buyer phrases are confirmed market language — real buyers typed these into Upwork and found jobs to post. Use them as the conversion language foundation. A buyer who reads this profile should feel they have found exactly what they were searching for.
+
+THE 6FE CONVERSION PRINCIPLES — OPERATIONAL RULES:
+
+Principle 1 — The client buys the result, not the developer:
+Nobody on Upwork hires a developer with five years of experience. They hire the person who is going to eliminate the specific problem they posted about. The profile overview and every proposal must open with the result the client needs — not the freelancer's background. Background is evidence. It comes after the result claim, not before it.
+
+Principle 2 — The first two lines win or lose the contract:
+On Upwork, the client sees the first two lines of each proposal before deciding whether to open it. If those two lines do not demonstrate that this developer understood the specific problem better than the other 49 applicants, the proposal is already lost. Never open with "Hi, I am a developer with X years of experience." Open with evidence that you have already diagnosed the problem.
+
+Principle 3 — Rate is a quality signal, not a negotiation:
+Low rates on Upwork filter out high-budget clients. A client hiring at $50–75 per hour assumes someone at $15 per hour has proportionally lower quality — and they are usually right about that assumption. The rate strategy must be calibrated to the activated spec's target rate from the Validator. Never suggest pricing below what the market validated unless the developer has zero Upwork history, in which case a 20% entry discount for the first two contracts is the maximum acceptable reduction.
+
+Principle 4 — The $1,000/week standard:
+Every element of this profile is evaluated against: does this justify $25 per hour minimum, moving toward $35–75 per hour within six months? If a section is generic, it fails. If the overview does not open with a result, it fails. If the portfolio has no metrics, it fails.
+
+WORKFLOW — IN THIS ORDER:
+
+Step 1 — Diagnosis before writing:
+Read both documents. Then tell the developer:
+- The highest revenue-per-hour niche for their stack based on the activated spec
+- The three job post categories where they have the strongest competitive edge
+- The rate they should open at given their Upwork history (new account vs existing JSS)
+- The single most critical gap between their current situation and landing a $35+/hour contract
+
+Step 2 — Profile title (70 characters):
+Formula options:
+- [Tech] Developer for [Specific Deliverable Type]
+- [Result] Specialist | [Tech Stack]
+- [Tech] Expert | [Problem They Solve] for [Client Type]
+Anchor the title to the activated spec and lead with a buyer phrase. Produce three options. Recommend one.
+
+Step 3 — Profile overview (first 300 characters are critical):
+Structure: Problem the client has → Result this developer delivers → Evidence → CTA.
+The first 300 characters must contain the primary buyer phrase and the strongest result from the Career Dissection Document. This is what the client reads before clicking See More. If this does not stop them, nothing else matters.
+
+Step 4 — Portfolio (3–5 entries):
+Each entry: result-oriented title, client's problem, solution implemented, measurable result, tech stack. Use the best result from the Career Dissection Document as the anchor entry. If the developer has no client projects, help them frame a personal or open-source project using the same structure.
+
+Step 5 — Rate strategy:
+Based on Upwork history and the validated target rate from the Profile Coach Input Block, give a specific opening rate and a six-month progression plan. Raise in $5 increments after each successful contract.
+
+Step 6 — Proposal template:
+Produce a base proposal template anchored to the activated spec. Then show two variations personalized for different job post types within the spec's niche. Each proposal: opening line that names the client's specific problem → evidence line → three-step action plan → one expert-level qualifying question → CTA for a 15-minute call.
+
+WHAT YOU DO NOT DO:
+You do not write a generic profile. You do not open proposals with "Hi, I am." You do not suggest rates below the Validator's validated range without explicit reason. You do not proceed without both input documents. You do not skip the diagnosis step. You do not use the words experienced, passionate, hardworking, results-driven, or dedicated anywhere in any output.</pre>
+          </div>
+          <button class="expand-btn" onclick="toggleExpand('uw-sp-wrap',this)">Show full prompt</button>
+        </div>
+      </div>
+
+      <!-- STEP B UW -->
+      <div class="step-card">
+        <div class="section-label-row"><span class="section-tag">B</span><h2 style="margin:0;">Knowledge Document — Second message or file attachment</h2></div>
+        <p class="section-sublabel">Step B · Upwork</p>
+        <p style="margin-bottom:.8rem;">Upwork-specific data and frameworks. Different platform, different logic.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem;">
+          <button class="download-btn" onclick="downloadDoc('uw-knowledge-doc','upwork_coach_knowledge.txt')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download .txt
+          </button>
+          <button class="download-btn secondary" onclick="copyBlock('uw-knowledge-doc',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy all
+          </button>
+        </div>
+        <div class="copy-block">
+          <div class="copy-block-header"><span>Upwork Knowledge Document</span></div>
+          <div class="expand-wrap" id="uw-kd-wrap">
+            <div class="fade"></div>
+            <pre id="uw-knowledge-doc">KNOWLEDGE DOCUMENT: Upwork for Developers — 6FE Standard
+=========================================================================
+Sources: Upwork Official Data, Freelancer.com Reports, Toptal Benchmarks, Contra, Arc.dev | Feb 2026
+
+SECTION 1: HOW UPWORK'S ALGORITHM WORKS
+------------------------------------------
+Signals the algorithm uses to rank freelancers:
+1. Job Success Score (JSS): metric #1. Below 90% = invisible in searches
+2. Profile completeness: 100% profile = 50% more direct invitations
+3. Response time: replying in under 1 hour = +30% contract probability
+4. Profile specialization: niche profiles convert 3x more than generalists
+5. Reviews with specific keywords in reviews = appears in those searches
+6. Recent activity: no activity in 30 days = ranking penalty
+
+SECTION 2: RATE STRUCTURE BY SENIORITY
+-----------------------------------------
+New account (no reviews):
+- Specialized stack (React, Node, Python): $25-40/hour
+- DevOps/Cloud/ML: $35-55/hour
+
+With 3-5 contracts and JSS 90%+:
+- Specialized: $40-60/hour
+- DevOps/Cloud/ML: $55-85/hour
+
+With 10+ contracts and JSS 95%+:
+- Top Rated: $50-90/hour
+- Deep specialization: $80-150/hour
+
+Rate strategy for new accounts:
+1. First 2-3 contracts: 20% below market to build JSS quickly
+2. After first positive review: raise $5/hour
+3. Every 3 successful contracts: evaluate raising $5-10/hour
+
+SECTION 3: PROFILE TITLE — WHAT WORKS
+---------------------------------------------
+High-converting titles:
+React/Frontend: "React Developer for SaaS Dashboards & Data Visualization"
+Node.js/Backend: "Backend Developer | REST APIs & Microservices | Node.js, PostgreSQL"
+Python: "Python Developer for Automation, Scraping & Data Pipelines"
+DevOps: "AWS DevOps Engineer | CI/CD, Kubernetes, Terraform | Cost Optimization"
+
+Low-converting (avoid): "Experienced Software Developer", "Full Stack Developer", generic titles
+
+SECTION 4: PROPOSAL — HIGH-CONVERSION STRUCTURE
+-------------------------------------------------------
+Average conversion rate: 3-5%. Top freelancers: 15-25%.
+
+Proven structure:
+[Line 1]: Show you understand the specific problem in the job post
+[Line 2]: Concrete evidence you can solve it
+[Paragraph 2]: 3-step high-level plan
+[Paragraph 3]: One qualifying question that demonstrates expertise
+[CTA]: "Happy to jump on a 15-min call to discuss the approach"
+
+Ideal length: 150-250 words. Over 300 = low read-through rate.
+
+Mistakes that kill conversion:
+- Starting with "Hi, I'm a developer with X years..."
+- Describing skills instead of results
+- Not asking a qualifying question
+- Proposal over 300 words
+
+SECTION 5: PROFILE OVERVIEW — FIRST 300 CHARS
+------------------------------------------------------
+Openings that convert:
+"Payment systems I've built process $2M+ monthly. I specialize in Node.js APIs and PostgreSQL architectures for fintech and SaaS companies that need reliability at scale."
+
+"I've helped 12 early-stage startups ship their MVPs in under 8 weeks. React + Node.js full stack with a focus on clean architecture."
+
+SECTION 6: PORTFOLIO
+--------------------------------------------
+3 well-documented projects = 2-3x more conversion.
+Structure: "[Result] for [Client Type]" → Client problem → Solution → Measurable result → Tech stack.
+
+SECTION 7: JOB SUCCESS SCORE — HOW TO BUILD IT FAST
+---------------------------------------------------------
+- 90-94%: Rising Talent badge, normal ranking
+- 95-99%: Top Rated, premium ranking, direct invitations
+- 100%: Top Rated Plus (requires $10K+ billed)
+
+Build JSS fast:
+1. First contracts: hourly with active clients
+2. Update client every 2-3 days proactively
+3. Always deliver before deadline
+4. Ask for reviews with keywords from your specialization
+
+SECTION 8: HIGHEST-RPH NICHES
+-------------------------------------------------
+High RPH ($50-100/hr in 6-12 months):
+- DevOps/AWS/Infrastructure automation
+- FinTech: payment systems, fraud detection
+- ML/AI integration (LLM APIs, RAG, embeddings)
+- Performance optimization (APIs, databases)
+
+Medium RPH ($30-60/hr in 3-6 months):
+- SaaS full stack (React + Node or Python)
+- API integrations and third-party services
+- MVP development for early-stage startups
+
+=========================================================================
+Upwork standard: Does this proposal beat the other 49 freelancers?
+=========================================================================</pre>
+          </div>
+          <button class="expand-btn" onclick="toggleExpand('uw-kd-wrap',this)">Show full document</button>
+        </div>
+      </div>
+
+      <!-- STEP C UW -->
+      <div class="step-card">
+        <div class="section-label-row"><span class="section-tag">C</span><h2 style="margin:0;">Starter Messages</h2></div>
+        <p class="section-sublabel">Step C · Upwork</p>
+        <div class="starter-grid">
+          <div class="starter-card">
+            <div class="starter-card-label">Option 1 — I have both documents ready</div>
+            <div class="starter-card-text">"I have pasted my Career Dissection Document and my Profile Coach Input Block above. My activated spec is [SPEC]. Run your diagnosis, then let's build section by section."</div>
+            <button class="starter-copy-btn" onclick="copyStarter('uw-s1',this)">Copy</button>
+            <span id="uw-s1" style="display:none">I have pasted my Career Dissection Document and my Profile Coach Input Block above. My activated spec is [PASTE SPEC SENTENCE HERE]. Run your diagnosis, then let's build section by section.</span>
+          </div>
+          <div class="starter-card">
+            <div class="starter-card-label">Option 2 — New to Upwork, zero contracts</div>
+            <div class="starter-card-text">"I have my Career Dissection Document and activated spec. I have never had a contract on Upwork. My primary concern is the rate strategy and how to build JSS fast."</div>
+            <button class="starter-copy-btn" onclick="copyStarter('uw-s2',this)">Copy</button>
+            <span id="uw-s2" style="display:none">I have my Career Dissection Document and activated spec. I have never had a contract on Upwork. My primary concern is the rate strategy and how to build JSS fast. Run the diagnosis and let's build.</span>
+          </div>
+          <div class="starter-card">
+            <div class="starter-card-label">Option 3 — Profile exists but does not convert</div>
+            <div class="starter-card-text">"I have my Career Dissection Document and activated spec. My Upwork URL is [URL]. My JSS is [X]% and I have [N] contracts. Tell me what is blocking conversion before we rebuild."</div>
+            <button class="starter-copy-btn" onclick="copyStarter('uw-s3',this)">Copy</button>
+            <span id="uw-s3" style="display:none">I have my Career Dissection Document and activated spec. My current Upwork profile URL is [PASTE URL]. My JSS is [X]% and I have [N] contracts. Tell me what is blocking conversion before we rebuild.</span>
+          </div>
+          <div class="starter-card">
+            <div class="starter-card-label">Option 4 — I need a proposal for a specific job post</div>
+            <div class="starter-card-text">"My activated spec is [SPEC]. My strongest result is [RESULT WITH NUMBER]. Here is the job post: [PASTE JOB POST]. Write me a proposal anchored to my spec and this post."</div>
+            <button class="starter-copy-btn" onclick="copyStarter('uw-s4',this)">Copy</button>
+            <span id="uw-s4" style="display:none">My activated spec is [PASTE SPEC]. My strongest result is [PASTE RESULT WITH NUMBER]. Here is the job post I want to apply to:
+
+[PASTE JOB POST HERE]
+
+Write me a proposal anchored to my spec and this specific post.</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content-upwork -->
+
+    <!-- COMPLETION -->
+    <div class="next-phase-wrap">
+      <div style="font-size:2.2rem;margin-bottom:.6rem;">🎯</div>
+      <div style="font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:.4rem;">You have completed the 6FE Program sequence.</div>
+      <p class="next-phase-sub">Your profile is built on a validated spec, real market data, and confirmed buyer language. Now send proposals.</p>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /phase-3 -->
+
+
+<footer>
+  <p>6FigureEngineer Program Hub · Service Spec → Market Validator → Profile Coach</p>
+  <p style="margin-top:.3rem">Dream Job · Earnable · Third Door (Ramit Sethi · Alex Banayan)</p>
+</footer>
+
+
+<script>
+/* ── PHASE NAVIGATION ── */
+let currentPhase = 1;
+const donePhases = new Set();
+
+function goToPhase(n) {
+  // Mark previous phase as done
+  if (n > currentPhase) donePhases.add(currentPhase);
+
+  // Update nav buttons
+  document.querySelectorAll('.phase-btn').forEach((btn, i) => {
+    btn.classList.remove('active');
+    if (donePhases.has(i + 1)) btn.classList.add('done');
+    else btn.classList.remove('done');
+  });
+  document.getElementById('nav-' + n).classList.add('active');
+
+  // Show/hide phase sections
+  document.querySelectorAll('.phase-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('phase-' + n).classList.add('active');
+
+  // Handle body class for Phase 3 color system
+  document.body.classList.remove('phase-3', 'upwork-mode');
+  if (n === 3) {
+    document.body.classList.add('phase-3');
+    // Restore platform state if user had switched
+    if (!document.getElementById('btn-linkedin').classList.contains('active')) {
+      document.body.classList.add('upwork-mode');
+    }
+  }
+
+  currentPhase = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── PLATFORM SWITCHER (Phase 3) ── */
+function switchPlatform(platform) {
+  const isLinkedIn = platform === 'linkedin';
+  document.getElementById('content-linkedin').classList.toggle('visible', isLinkedIn);
+  document.getElementById('content-upwork').classList.toggle('visible', !isLinkedIn);
+  document.getElementById('btn-linkedin').classList.toggle('active', isLinkedIn);
+  document.getElementById('btn-upwork').classList.toggle('active', !isLinkedIn);
+  document.body.classList.toggle('upwork-mode', !isLinkedIn);
+}
+
+/* ── COPY BLOCK ── */
+function copyBlock(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '&#10003; Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2500);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = el.textContent.trim();
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    const orig = btn.innerHTML;
+    btn.innerHTML = '&#10003; Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2500);
+  });
+}
+
+/* ── COPY STARTER ── */
+function copyStarter(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* ── EXPAND / COLLAPSE ── */
+function toggleExpand(wrapId, btn) {
+  const wrap = document.getElementById(wrapId);
+  wrap.classList.toggle('open');
+  btn.textContent = wrap.classList.contains('open') ? 'Show less' : 'Show full prompt';
+}
+
+/* ── DOWNLOAD .TXT ── */
+function downloadDoc(elementId, filename) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  const blob = new Blob([el.textContent.trim()], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RevEngine — LinkedIn Positioning Engine | 6FE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0c0c;
+  --surface:#141414;
+  --surface2:#1c1c1c;
+  --border:#272727;
+  --border2:#333;
+  --accent:#f5a623;
+  --accent-dim:rgba(245,166,35,0.12);
+  --accent-border:rgba(245,166,35,0.35);
+  --text:#efefef;
+  --text-muted:#777;
+  --text-soft:#aaa;
+  --success:#22c55e;
+  --success-dim:rgba(34,197,94,0.12);
+  --error:#f87171;
+}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:40px 20px 80px;
+}
+.wrap{width:100%;max-width:660px}
+
+/* ── HEADER ── */
+.header{text-align:center;margin-bottom:44px}
+.logo{
+  display:inline-block;
+  font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:16px;
+}
+.header h1{font-size:26px;font-weight:700;margin-bottom:8px;line-height:1.25}
+.header p{color:var(--text-muted);font-size:14px;line-height:1.6}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-bottom:28px}
+.progress-meta{display:flex;justify-content:space-between;margin-bottom:8px}
+.progress-meta span{font-size:11px;color:var(--text-muted);letter-spacing:.5px}
+.bar-track{height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+
+/* ── CARD ── */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:40px 40px 36px;
+}
+@media(max-width:520px){.card{padding:28px 22px 26px}}
+
+/* ── STEPS ── */
+.step{display:none}
+.step.active{display:block}
+.step-tag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.step h2{font-size:21px;font-weight:700;line-height:1.3;margin-bottom:8px}
+.step .desc{color:var(--text-soft);font-size:14px;line-height:1.65;margin-bottom:28px}
+
+/* ── FIELDS ── */
+.field{margin-bottom:22px}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:7px;color:var(--text)}
+label .hint{font-weight:400;color:var(--text-muted);font-size:12px;margin-left:5px}
+input[type=text],input[type=url],input[type=password],textarea{
+  width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;
+  padding:12px 15px;color:var(--text);font-size:14px;font-family:inherit;line-height:1.55;
+  outline:none;transition:border-color .2s;resize:vertical;
+}
+input::placeholder,textarea::placeholder{color:#444}
+input:focus,textarea:focus{border-color:var(--accent)}
+textarea{min-height:130px}
+textarea.tall{min-height:200px}
+.err{color:var(--error);font-size:12px;margin-top:5px;display:none}
+
+/* ── RADIO ── */
+.radio-row{display:flex;gap:10px}
+.ropt{flex:1;cursor:pointer}
+.ropt input{display:none}
+.rlabel{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:12px 10px;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;
+  color:var(--text-soft);
+}
+.ropt input:checked + .rlabel{
+  border-color:var(--accent);background:var(--accent-dim);color:var(--accent);
+}
+
+/* ── CALLOUT ── */
+.callout{
+  background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:8px;
+  padding:13px 16px;font-size:13px;color:var(--text-soft);margin-bottom:22px;line-height:1.55;
+}
+.callout strong{color:var(--accent)}
+.callout a{color:var(--accent);text-decoration:none}
+.callout a:hover{text-decoration:underline}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;gap:10px;margin-top:30px}
+.btn{
+  padding:12px 22px;border-radius:8px;font-size:14px;font-weight:600;
+  cursor:pointer;border:none;font-family:inherit;transition:all .2s;
+}
+.btn-primary{background:var(--accent);color:#000;flex:1}
+.btn-primary:hover{background:#e09520;transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-back{
+  background:none;border:1px solid var(--border2);color:var(--text-muted);
+  padding:12px 18px;
+}
+.btn-back:hover{border-color:var(--border2);color:var(--text)}
+
+/* ── LOADING ── */
+.loading-inner{text-align:center;padding:56px 0}
+.spinner{
+  width:44px;height:44px;border:3px solid var(--border2);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 22px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-inner h3{font-size:17px;margin-bottom:8px}
+.loading-inner p{color:var(--text-muted);font-size:13px}
+.loading-dots::after{content:'';animation:dots 1.4s infinite}
+@keyframes dots{0%{content:''}33%{content:'.'}66%{content:'..'}100%{content:'...'}}
+
+/* ── RESULTS ── */
+.results-wrap{display:none}
+.results-wrap.show{display:block}
+.results-top{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:28px 32px;margin-bottom:16px;display:flex;align-items:center;gap:14px;
+}
+.ok-badge{
+  background:var(--success-dim);border:1px solid rgba(34,197,94,.3);
+  color:var(--success);font-size:10px;font-weight:800;letter-spacing:2px;
+  text-transform:uppercase;padding:5px 11px;border-radius:100px;white-space:nowrap;
+}
+.results-top h2{font-size:18px;font-weight:700}
+
+.out-block{margin-bottom:12px;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.out-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 20px;background:var(--surface2);border-bottom:1px solid var(--border);
+}
+.out-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}
+.copy-btn{
+  font-size:11px;font-weight:600;color:var(--text-muted);background:none;
+  border:1px solid var(--border2);border-radius:5px;padding:4px 11px;cursor:pointer;
+  font-family:inherit;transition:all .15s;
+}
+.copy-btn:hover{color:var(--text);border-color:#444}
+.copy-btn.done{color:var(--success);border-color:var(--success)}
+.out-body{
+  padding:20px;font-size:14px;line-height:1.75;white-space:pre-wrap;
+  color:var(--text);background:var(--surface);
+}
+
+.restart{
+  display:block;width:100%;margin-top:8px;text-align:center;
+  background:none;border:1px solid var(--border);border-radius:9px;
+  padding:13px;color:var(--text-muted);font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:all .2s;
+}
+.restart:hover{border-color:var(--border2);color:var(--text)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="logo">6FigureEngineer · RevEngine</div>
+    <h1>LinkedIn Positioning Engine</h1>
+    <p>7 questions. Your title, bio, ICP, and outbound sequence — ready in under a minute.</p>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-wrap" id="progressWrap" style="display:none">
+    <div class="progress-meta">
+      <span id="stepLabel">Step 1 of 7</span>
+      <span id="stepPct">14%</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="barFill" style="width:14%"></div></div>
+  </div>
+
+  <!-- Form card -->
+  <div class="card" id="formCard">
+
+    <!-- Step 0: API Key -->
+    <div class="step active" data-step="0">
+      <div class="step-tag">Setup</div>
+      <h2>Enter your Anthropic API key</h2>
+      <p class="desc">Runs entirely in your browser. The key is only sent to Anthropic's API — never stored, never logged.</p>
+      <div class="callout">
+        Get a key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys → Create Key.<br>
+        <strong>Note:</strong> Usage is billed to your Anthropic account at standard API rates.
+      </div>
+      <div class="field">
+        <label>API Key</label>
+        <input type="password" id="f_apiKey" placeholder="sk-ant-api03-..." autocomplete="off"/>
+        <div class="err" id="e_apiKey">Required — paste your Anthropic API key above.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="next(0)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 1: Name -->
+    <div class="step" data-step="1">
+      <div class="step-tag">Step 1 of 7</div>
+      <h2>Who are we positioning?</h2>
+      <p class="desc">Your name and company are used to name the ICP saved searches and personalize the outputs.</p>
+      <div class="field">
+        <label>Your Name</label>
+        <input type="text" id="f_name" placeholder="e.g. Roberto Calvo"/>
+        <div class="err" id="e_name">Required.</div>
+      </div>
+      <div class="field">
+        <label>Company Name</label>
+        <input type="text" id="f_company" placeholder="e.g. Bizflow"/>
+        <div class="err" id="e_company">Required.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="back(1)">← Back</button>
+        <button class="btn btn-primary" onclick="next(1)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Service -->
+    <div class="step" data-step="2">
+      <div class="step-tag">Step 2 of 7</div>
+      <h2>What do you actually deliver?</h2>
+      <p class="desc">Describe your service with precision. What do clients receive, and on what timeline? Vague inputs produce generic outputs — be specific.</p>
+      <div class="field">
+        <label>Service Description & Deliverables <span class="hint">include timelines where relevant</span></label>
+        <textarea class="tall" id="f_service" placeholder="e.g. We design and build custom enterprise software platforms for large-scale industrial operations — mining, heavy construction, regulated manufacturing. Core deliverables: Operations Management Platforms (12–24 week MVP), Real-Time Production Systems (8–16 weeks), Field Workforce Systems (10–20 weeks). All delivered as full-stack web + mobile, with 12-month managed operations included..."></textarea>
+        <div class="err" id="e_service">Required.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="back(2)">← Back</button>
+        <button class="btn btn-primary" onclick="next(2)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Clients -->
+    <div class="step" data-step="3">
+      <div class="step-tag">Step 3 of 7</div>
+      <h2>Name your biggest clients.</h2>
+      <p class="desc">Specific names, revenues, employee counts, industries, and what you did for them. Company names and scale are the raw material for credibility — don't summarize, list.</p>
+      <div class="field">
+        <label>Client Portfolio <span class="hint">company · size · what you built</span></label>
+        <textarea class="tall" id="f_clients" placeholder="e.g. Fluor Corporation (USA) — Fortune 500, $15.5B revenue, world's largest publicly traded E&C firm. Built operational software for field workforce management in Peru.&#10;&#10;Anglo American (UK) — FTSE 100, $18.5B revenue, 43,000+ employees. Enterprise platforms across Latin American mining operations — $2M+ in documented savings.&#10;&#10;Smith+Nephew (UK) — $5.8B revenue, 18,000 employees. Real-time Hourly Production System for their $55M Costa Rica facility under FDA/CE standards..."></textarea>
+        <div class="err" id="e_clients">Required.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="back(3)">← Back</button>
+        <button class="btn btn-primary" onclick="next(3)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Results -->
+    <div class="step" data-step="4">
+      <div class="step-tag">Step 4 of 7</div>
+      <h2>Prove it with numbers.</h2>
+      <p class="desc">Real results only — dollar amounts, hours recovered, percentage improvements, headcounts managed. Pair each number with the client name. If you have no hard number for a result, describe what operationally changed.</p>
+      <div class="field">
+        <label>Quantified Results <span class="hint">client name + metric + context for each</span></label>
+        <textarea class="tall" id="f_results" placeholder="e.g. $8M+ saved for OHL (Spain) — materials management system across two Quellaveco megaprojects eliminated procurement redundancies.&#10;&#10;1,048,338 man-hours recovered at CUMBRA's K-172 Quellaveco project — previously lost to manual data entry and Excel consolidation.&#10;&#10;90% reduction in Excel dependency across critical operational processes.&#10;&#10;50,000+ concurrent users on custom-built platforms across multiple simultaneous projects..."></textarea>
+        <div class="err" id="e_results">Required.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="back(4)">← Back</button>
+        <button class="btn btn-primary" onclick="next(4)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 5: ICP -->
+    <div class="step" data-step="5">
+      <div class="step-tag">Step 5 of 7</div>
+      <h2>Who are you trying to reach?</h2>
+      <p class="desc">Target industries, company sizes, geographies, and the specific job titles of the people who sign the check. Be as specific as you were with your client list.</p>
+      <div class="field">
+        <label>Target Market & Geography</label>
+        <textarea id="f_icp" placeholder="e.g. Enterprises headquartered in OECD countries (USA, Canada, UK, Australia, Germany, France) that operate projects in Latin America. Industries: mining, heavy construction EPC, oil & gas, energy, regulated manufacturing.&#10;&#10;Ideal contacts: VP of Operations, Project Director, COO, IT Director at companies with 1,000–50,000+ employees and $200M+ annual revenue.&#10;&#10;Not targeting: startups, SMBs, Latin American companies as primary channel..."></textarea>
+        <div class="err" id="e_icp">Required.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="back(5)">← Back</button>
+        <button class="btn btn-primary" onclick="next(5)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 6: LinkedIn -->
+    <div class="step" data-step="6">
+      <div class="step-tag">Step 6 of 7</div>
+      <h2>Your LinkedIn profile URL.</h2>
+      <p class="desc">Used to reference your profile in the outbound sequence and ICP configuration.</p>
+      <div class="field">
+        <label>LinkedIn Profile URL</label>
+        <input type="url" id="f_linkedin" placeholder="https://www.linkedin.com/in/yourprofile/"/>
+        <div class="err" id="e_linkedin">Required.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="back(6)">← Back</button>
+        <button class="btn btn-primary" onclick="next(6)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 7: Demo Video -->
+    <div class="step" data-step="7">
+      <div class="step-tag">Step 7 of 7</div>
+      <h2>Do you have a demo video or case study asset?</h2>
+      <p class="desc">This determines whether Message 4 in your outbound sequence is fully written or held as a placeholder until the asset exists.</p>
+      <div class="field">
+        <div class="radio-row">
+          <label class="ropt">
+            <input type="radio" name="demo" value="yes" id="demoYes">
+            <span class="rlabel">✓&nbsp; Yes — asset ready</span>
+          </label>
+          <label class="ropt">
+            <input type="radio" name="demo" value="no" id="demoNo" checked>
+            <span class="rlabel">✗&nbsp; Not yet</span>
+          </label>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="back(7)">← Back</button>
+        <button class="btn btn-primary" onclick="submit()">Generate outputs →</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="step" data-step="loading">
+      <div class="loading-inner">
+        <div class="spinner"></div>
+        <h3>Building your positioning<span class="loading-dots"></span></h3>
+        <p>This takes 30–60 seconds. Don't close the tab.</p>
+      </div>
+    </div>
+
+  </div><!-- /card -->
+
+  <!-- Results -->
+  <div class="results-wrap" id="resultsWrap">
+    <div class="results-top">
+      <span class="ok-badge">Complete</span>
+      <h2>Your LinkedIn positioning is ready.</h2>
+    </div>
+    <div id="outputBlocks"></div>
+    <button class="restart" onclick="restart()">← Start over with a new client</button>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+const TOTAL = 7;
+let cur = 0;
+
+// ── System prompt ──────────────────────────────────────────────────
+const SYS = `You are a LinkedIn positioning strategist for 6FigureEngineer (6FE). Your job is to produce four outputs for a client: a LinkedIn title, a LinkedIn bio, a 5-message outbound sequence, and an ICP definition for Sales Navigator saved searches.
+
+You operate on three core principles. First: the LinkedIn profile is a landing page. Every word serves the reader, not the writer. Second: show don't tell. Competence is demonstrated through specificity and deep understanding of the client's world, never claimed directly. Third: what's in it for them. All outputs are written from the perspective of the client's client — their pain, their reality, their failed attempts.
+
+You will receive a structured intake from the client. Use every specific detail they provide. Numbers, company names, project scales, and quantified results are your most valuable inputs. Never generalize what they have given you specifically.
+
+---
+
+OUTPUT 1: LINKEDIN TITLE
+
+Structure: [Niche + Core Problem] | [Mechanism that solves it, positioned against what ERP or generic software cannot do] | [Quantified proof point]
+
+Rules:
+- Always exactly three segments separated by pipe characters
+- The niche must be specific. "Mining Operations" not "Industrial Software"
+- The mechanism must implicitly or explicitly position against the known failed alternative the client's market has already tried
+- The proof point must be a real number with a timeframe or scale. If the client has no quantified result, omit the third segment entirely. Never fabricate or approximate.
+- Maximum 220 characters total
+
+---
+
+OUTPUT 2: LINKEDIN BIO
+
+Structure — follow this sequence exactly:
+
+1. Open inside the client's world. Describe their operation at scale. Use the specific numbers they gave you: worker counts, site counts, contractor ecosystem size. Never mention the client by name or credential in the first third of the bio.
+
+2. Name the invisible problem. The gap between what leadership sees and what is actually happening on the ground. Make it feel like you are reading their mind. Use short punchy lines. Use "Right now..." sentence patterns when appropriate to create immediacy.
+
+3. Name the failed solutions. What they have already tried: ERP systems, consultants, integrations, expensive software. Validate their frustration. Do not mock the solutions — acknowledge they were reasonable choices.
+
+4. Explain why those solutions failed structurally. The problem was never the software. It was something deeper: visibility, real-time data, the gap between systems that update overnight and operations that change by the hour.
+
+5. Introduce the client. Only here, two thirds into the bio. How many years. What they watched. What pattern they kept seeing. This is the moment credibility arrives — earned, not announced.
+
+6. Close with the offer. Framed as architecture or methodology, not software. What they built differently and why it works where everything else broke down.
+
+Tone rules:
+- Professional, conversational, clean
+- Scannable: short paragraphs, strategic line breaks
+- Never sounds like AI
+- Never sounds like a resume or a sales pitch
+- Bullets only when listing parallel pains or parallel failed solutions
+- First person throughout
+
+---
+
+OUTPUT 3: ICP FOR SALES NAVIGATOR
+
+Produce three saved search configurations — Broad, Mid, Niche — differentiated by company size. Each search is mutually exclusive from the others.
+
+For each search define:
+- Target roles (job titles)
+- Seniority level
+- Geography
+- Company size range
+- Any industry filters derived from the client's background and sector focus
+
+Base the ICP on the client's actual experience and results. The sectors and company sizes they have genuinely delivered for are the ICP. Do not invent target markets they have no credibility in.
+
+Search naming convention: [ClientName]_Broad / [ClientName]_Mid / [ClientName]_Niche
+
+---
+
+OUTPUT 4: 5-MESSAGE OUTBOUND SEQUENCE
+
+Follow this structure exactly:
+
+Message 1: Connection acknowledgment only. Warm, zero pitch, zero ask. Maximum 10 words after the first name variable.
+
+Message 2 (First real message): Lead with their world. Name the invisible problem in one sentence. Disqualify the obvious solution they have already tried. End with a diagnostic question that makes them self-assess. Never name your service. Never pitch.
+
+Message 3: Social proof through specificity. One real quantified result. Position it as something you observed or built, not something you are selling. End with a low-friction CTA — offer a short video or case study, never a call.
+
+Message 4: Only include if the client has a demo video or case study asset ready. If they do not have this asset, output a placeholder note instead: [MESSAGE 4 PENDING — requires demo video asset]. When the asset exists, this message is a single-question follow-up referencing the video with a reframe toward their specific operation.
+
+Message 5 (Breakup): Reposition as a peer and network builder. No desperation. No pitch. One genuine question about what challenge they are focused on right now.
+
+Tone rules for all messages:
+- Never sell. Diagnose.
+- Conversational, not formal
+- Each message reads like it came from a senior operator, not a vendor
+- The sequence mirrors the bio philosophy: their reality first, your credibility second, your offer last and softly
+
+---
+
+WHAT YOU NEVER DO:
+- Never fabricate numbers, company names, or results
+- Never write a bio that opens with the client's name or credentials
+- Never produce a generic ICP that could apply to any software developer
+- Never write a message sequence that pitches a service in the first two messages
+- Never use AI-sounding phrases, buzzwords, or corporate filler language
+- Never omit the proof point segment in the title unless the client genuinely has no quantified result
+- Never include Message 4 if no video asset has been confirmed
+
+---
+
+FORMAT YOUR RESPONSE USING EXACTLY THESE SECTION HEADERS (no deviation):
+
+## OUTPUT 1: LINKEDIN TITLE
+[content]
+
+## OUTPUT 2: LINKEDIN BIO
+[content]
+
+## OUTPUT 3: ICP FOR SALES NAVIGATOR
+[content]
+
+## OUTPUT 4: 5-MESSAGE OUTBOUND SEQUENCE
+[content]`;
+
+// ── Validation map ─────────────────────────────────────────────────
+const CHECKS = {
+  0: [['f_apiKey','e_apiKey']],
+  1: [['f_name','e_name'],['f_company','e_company']],
+  2: [['f_service','e_service']],
+  3: [['f_clients','e_clients']],
+  4: [['f_results','e_results']],
+  5: [['f_icp','e_icp']],
+  6: [['f_linkedin','e_linkedin']],
+};
+
+function validate(step) {
+  let ok = true;
+  (CHECKS[step]||[]).forEach(([fid,eid])=>{
+    const el = document.getElementById(fid);
+    const er = document.getElementById(eid);
+    if (!el.value.trim()) { er.style.display='block'; ok=false; }
+    else er.style.display='none';
+  });
+  return ok;
+}
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  const pw = document.getElementById('progressWrap');
+  if (n==='loading') {
+    document.querySelector('[data-step="loading"]').classList.add('active');
+    pw.style.display='none';
+    return;
+  }
+  document.querySelector(`[data-step="${n}"]`).classList.add('active');
+  if (n===0) { pw.style.display='none'; return; }
+  pw.style.display='block';
+  const pct = Math.round((n/TOTAL)*100);
+  document.getElementById('barFill').style.width = pct+'%';
+  document.getElementById('stepLabel').textContent = `Step ${n} of ${TOTAL}`;
+  document.getElementById('stepPct').textContent = pct+'%';
+}
+
+function next(from) {
+  if (!validate(from)) return;
+  cur = from+1;
+  showStep(cur);
+}
+
+function back(from) {
+  cur = from-1;
+  showStep(cur);
+}
+
+// ── Submit ─────────────────────────────────────────────────────────
+async function submit() {
+  const demoVal = document.querySelector('input[name="demo"]:checked').value;
+  const intake = [
+    'CLIENT INTAKE',
+    '=============',
+    `Name: ${v('f_name')}`,
+    `Company: ${v('f_company')}`,
+    `LinkedIn: ${v('f_linkedin')}`,
+    `Demo Video Asset: ${demoVal==='yes'?'YES — asset is ready':'NO — not yet available'}`,
+    '',
+    'SERVICE DESCRIPTION & DELIVERABLES:',
+    v('f_service'),
+    '',
+    'CLIENT PORTFOLIO (biggest clients, company names, scale):',
+    v('f_clients'),
+    '',
+    'QUANTIFIED RESULTS (real numbers, client attributed):',
+    v('f_results'),
+    '',
+    'TARGET MARKET & GEOGRAPHY:',
+    v('f_icp'),
+  ].join('\n');
+
+  showStep('loading');
+  document.getElementById('formCard').style.display='none';
+
+  const key = v('f_apiKey');
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-opus-4-6',
+        max_tokens:4096,
+        system:SYS,
+        messages:[{role:'user',content:intake}]
+      })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(()=>({error:{message:res.statusText}}));
+      throw new Error(err.error?.message||'API error '+res.status);
+    }
+    const data = await res.json();
+    render(data.content[0].text);
+  } catch(err) {
+    document.getElementById('formCard').style.display='block';
+    showStep(0);
+    document.getElementById('f_apiKey').value='';
+    document.getElementById('e_apiKey').style.display='none';
+    alert('Error calling Claude API:\n\n'+err.message+'\n\nCheck your API key and try again.');
+  }
+}
+
+// ── Render results ─────────────────────────────────────────────────
+const SECTIONS = [
+  {key:'OUTPUT 1: LINKEDIN TITLE',       label:'01 — LinkedIn Title'},
+  {key:'OUTPUT 2: LINKEDIN BIO',         label:'02 — LinkedIn Bio'},
+  {key:'OUTPUT 3: ICP FOR SALES NAVIGATOR', label:'03 — ICP · Sales Navigator Searches'},
+  {key:'OUTPUT 4: 5-MESSAGE OUTBOUND SEQUENCE', label:'04 — 5-Message Outbound Sequence'},
+];
+
+function render(text) {
+  const blocks = document.getElementById('outputBlocks');
+  blocks.innerHTML = '';
+  SECTIONS.forEach((sec,i)=>{
+    const start = text.indexOf('## '+sec.key);
+    const next  = i<SECTIONS.length-1 ? text.indexOf('## '+SECTIONS[i+1].key) : text.length;
+    let content = '(Section not returned — try regenerating.)';
+    if (start!==-1) {
+      content = text.slice(start+('## '+sec.key).length, next===-1?text.length:next).trim();
+    }
+    const div = document.createElement('div');
+    div.className='out-block';
+    div.innerHTML=`
+      <div class="out-head">
+        <span class="out-label">${sec.label}</span>
+        <button class="copy-btn" onclick="copyOut(this,${i})">Copy</button>
+      </div>
+      <div class="out-body" id="ob-${i}">${esc(content)}</div>`;
+    blocks.appendChild(div);
+  });
+  document.getElementById('formCard').style.display='none';
+  document.getElementById('progressWrap').style.display='none';
+  const rw = document.getElementById('resultsWrap');
+  rw.style.display='block';
+  rw.classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function copyOut(btn,i) {
+  const text = document.getElementById('ob-'+i).textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copied!'; btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done')},2200);
+  });
+}
+
+function restart() {
+  ['f_apiKey','f_name','f_company','f_service','f_clients','f_results','f_icp','f_linkedin']
+    .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('demoNo').checked=true;
+  document.getElementById('resultsWrap').style.display='none';
+  document.getElementById('resultsWrap').classList.remove('show');
+  document.getElementById('formCard').style.display='block';
+  cur=0; showStep(0);
+}
+
+// ── Helpers ────────────────────────────────────────────────────────
+function v(id){return document.getElementById(id).value.trim()}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+</script>
+</body>
+</html>
