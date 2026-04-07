@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daniel Rodriguez · AI RevOps Architect</title>
+  <title>Daniel Rodriguez · AI Operations Specialist</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -377,14 +377,8 @@
 
   <div class="page-wrapper">
 
-    <!-- ─── Nav ────────────────────────────────────── -->
-    <nav>
-      <a href="https://www.linkedin.com/in/danielroz/" target="_blank" rel="noopener noreferrer" class="nav-link">LinkedIn ↗</a>
-    </nav>
-
-
     <!-- ─── Hero ───────────────────────────────────── -->
-    <section class="hero">
+    <section class="hero" style="padding-top: 80px;">
       <!-- Extra SVG grain layer on hero only -->
       <svg class="hero-noise" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
@@ -399,21 +393,20 @@
       </svg>
 
       <div class="hero-content">
-        <p class="eyebrow">AI RevOps Architect</p>
+        <p class="eyebrow">AI Operations Specialist</p>
 
         <h1>
-          Everyone's talking about AI.<br>
-          <span class="h1-italic">Nobody's telling you where it</span><br>
-          <span class="h1-italic">actually fits in your business.</span>
+          I build AI-powered systems for founders whose business still runs through them.
         </h1>
 
-        <p class="hero-subhead">
-          Most B2B SaaS founders have tried the tools. <strong>Nothing stuck.</strong> Not because the tools were wrong. There was no architecture connecting any of it. The real problem isn't your software stack. It's that your entire operation still runs through you.
+        <p class="hero-subhead" style="font-style:italic;">
+          Most founders have tried the tools. Nothing stuck. Not because the tools were wrong — because there was no architecture connecting any of it.
         </p>
 
-        <a href="https://www.linkedin.com/in/danielroz/" target="_blank" rel="noopener noreferrer" class="cta-btn">
-          Send a message on LinkedIn <span class="arrow">→</span>
-        </a>
+        <p class="hero-subhead" style="font-style:normal; margin-top: -20px;">
+          I design and build the operational infrastructure that removes you as the bottleneck. Acquisition systems, delivery automation, AI agents, revenue visibility — built to run without your daily input.
+        </p>
+
       </div>
     </section>
 
@@ -457,6 +450,7 @@
         <div class="work-card">
           <p class="card-tag">LinkedIn Acquisition</p>
           <h3 class="card-title">RevEngine</h3>
+          <p class="card-problem">Lead generation was entirely manual and founder-dependent. No system, no follow-up, no consistency.</p>
           <p class="card-problem">Lead generation depended entirely on whoever had bandwidth that week. Referrals, manual outreach, no follow-up system.</p>
           <p class="card-built">Built a fully automated LinkedIn acquisition system targeting the exact ICP with sequenced outreach infrastructure. GTM strategy embedded directly into the automation logic. Zero daily human operation required.</p>
           <p class="card-result">Qualified leads booking calls within 15 days of deployment.</p>
@@ -467,26 +461,28 @@
         <div class="work-card">
           <p class="card-tag">Retention Operations</p>
           <h3 class="card-title">Client Success Dashboard</h3>
+          <p class="card-problem">At-risk clients were invisible until they had already decided to leave.</p>
           <p class="card-problem">At-risk accounts were invisible until they'd already decided to leave. The team had no shared view of where clients actually were.</p>
           <p class="card-built">Designed a Monday.com operations layer mapping every client touchpoint: progress signals, engagement patterns, risk indicators. All in a single real-time dashboard the success team could act from.</p>
           <p class="card-result">Churn decreased. NPS increased. Clients stopped falling through the cracks because the system surfaced them before they quit.</p>
           <iframe class="card-iframe" src="./Artifacts/dashboard.html" title="Client Success Dashboard" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
         </div>
 
-        <!-- Card 3: Productized Coaching Tools -->
+        <!-- Card 3: Program Workflow -->
         <div class="work-card">
-          <p class="card-tag">Delivery Automation</p>
-          <h3 class="card-title">Productized Coaching Tools</h3>
-          <p class="card-problem">Clients kept hitting the same two walls. The team kept scheduling the same 1:1s to solve them. Founder time consumed by problems already solved.</p>
-          <p class="card-built">Converted the team's repeatable frameworks into interactive HTML tools: a Service Spec Coach and a Profile Coach. Each walks clients through the exact process autonomously.</p>
-          <p class="card-result">An entire category of recurring 1:1s eliminated. Clients unblock themselves.</p>
-          <iframe class="card-iframe" src="./Artifacts/6fe-program-hub.html" title="Productized Coaching Tools" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
+          <p class="card-tag">System Architecture</p>
+          <h3 class="card-title">Program Workflow</h3>
+          <p class="card-problem">No single view existed of how acquisition connected to delivery, or how clients moved through each level of the program.</p>
+          <p class="card-built">Mapped the full operational architecture end-to-end: acquisition channels, qualification logic, sales flow, onboarding sequence, and the four-level delivery framework from Rookie to Black Ops.</p>
+          <p class="card-result">The entire operation visible in one diagram. Every handoff defined. Every stage accountable.</p>
+          <iframe class="card-iframe" src="./Artifacts/program-workflow.html" title="Program Workflow" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
         </div>
 
         <!-- Card 4: VOC AI Agent -->
         <div class="work-card">
           <p class="card-tag">Intelligence Layer</p>
           <h3 class="card-title">Voice of Customer AI Agent</h3>
+          <p class="card-problem">Positioning decisions were being made from gut feel, not from what customers actually said.</p>
           <p class="card-problem">Positioning and content decisions were being made from competitor feeds and gut feel. Not from what actual customers said in calls.</p>
           <p class="card-built">Deployed an AI agent that processes sales call recordings end-to-end: extracts objections, fears, and real language patterns, then delivers structured reports the founder acts on immediately.</p>
           <p class="card-result">Positioning shifted from trend-chasing to customer-led. Decisions now come from signal, not assumption.</p>
@@ -506,15 +502,12 @@
       <p class="cta-subhead">
         No pitch. No deck. A direct conversation about where AI actually fits in your operation and what it would take to build it right.
       </p>
-      <a href="https://www.linkedin.com/in/danielroz/" target="_blank" rel="noopener noreferrer" class="cta-btn">
-        Send a message on LinkedIn <span class="arrow">→</span>
-      </a>
     </section>
 
 
     <!-- ─── Footer ───────────────────────────────────── -->
     <footer>
-      <span>Daniel Rodriguez · AI RevOps Architect</span>
+      <span>Daniel Rodriguez · AI Operations Specialist</span>
       <span>© 2026</span>
     </footer>
 
